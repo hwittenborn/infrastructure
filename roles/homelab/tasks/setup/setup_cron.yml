@@ -1,0 +1,7 @@
+- name: Install Cron config
+  ansible.builtin.copy:
+    src: server/cron/cron
+    dest: /etc/cron.d/homelab
+    owner: root
+    group: root
+    mode: '755'

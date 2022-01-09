@@ -1,0 +1,83 @@
+- name: Ensure needed packages are installed
+  ansible.builtin.apt:
+    state: present
+    pkg:
+      - certbot
+      - cron
+      - docker
+      - docker-compose
+      - gpg
+      - nginx
+      - python3-certbot-dns-cloudflare
+      - restic
+      - wget
+
+- name: Setup NGINX
+  import_tasks: setup/setup_nginx.yml
+
+- name: Setup APT
+  import_tasks: setup/setup_apt.yml
+
+# We need to implement checking if any cron jobs are running themselves, and abort if so.
+- name: Ensure systemd services are properly configured
+  ansible.builtin.systemd:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  loop: [
+    {"name": "cron", "state": "stopped"},
+    {"name": "docker", "state": "started"},
+    {"name": "nginx", "state": "started"}
+  ]
+
+- name: Install scripts
+  import_tasks: setup/setup_scripts.yml
+
+- name: Install Cron jobs
+  import_tasks: setup/setup_cron.yml
+
+- name: Find list of services currently on the server
+  register: services
+  ansible.builtin.find:
+    paths: /var/www/
+    file_type: directory
+    recurse: no
+
+- name: Stop any services we no longer need
+  loop: "{{ services.files }}"
+  when: "'{{ item.path | basename }}' not in current_services"
+  ansible.builtin.command:
+    argv: ["./service.sh", "stop"]
+    removes: "./service.sh"
+    chdir: "{{ item.path }}"
+  loop_control:
+    label: "{{ item.path }}"
+
+- name: Remove data for any services we no longer need
+  loop: "{{ services.files }}"
+  when: "'{{ item.path | basename }}' not in current_services"
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  loop_control:
+    label: "{{ item.path }}"
+
+- name: Setup services
+  include_tasks: "services/{{ service }}"
+  loop:
+    - proget.hunterwittenborn.com
+    - drone.hunterwittenborn.com
+    - nextcloud.hunterwittenborn.com
+    - matrix.hunterwittenborn.com
+    - element.hunterwittenborn.com
+    - shlink.hunterwittenborn.com
+  loop_control:
+    loop_var: service
+
+- name: Ensure needed systemd services are running
+  ansible.builtin.systemd:
+    service: "{{ item }}"
+    state: started
+  loop:
+    - cron
+    - docker
+    - nginx

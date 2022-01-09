@@ -1,0 +1,41 @@
+version: '3.5'
+services:
+  nextcloud_app:
+    container_name: nextcloud_app
+    image: nextcloud:stable
+    restart: unless-stopped
+    networks:
+      - nextcloud
+    ports:
+      - 5030:80
+    volumes:
+      - ./data/app:/var/www/html
+    environment:
+      # Database
+      POSTGRES_DB: 'database'
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: '{{ nextcloud_postgres_password }}'
+      POSTGRES_HOST: 'nextcloud_postgres'
+
+      # PROXY
+      OVERWRITEPROTOCOL: 'https'
+
+      # Other
+      NEXTCLOUD_TRUSTED_DOMAINS: 'nextcloud.hunterwittenborn.com'
+
+  nextcloud_postgres:
+    container_name: nextcloud_postgres
+    image: postgres:13
+    restart: unless-stopped
+    networks:
+      - nextcloud
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: 'database'
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: '{{ nextcloud_postgres_password }}'
+
+networks:
+  nextcloud:
+    name: nextcloud

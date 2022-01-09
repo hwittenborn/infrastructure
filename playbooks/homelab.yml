@@ -1,0 +1,6 @@
+---
+- name: Deploy homelab
+  hosts: homelab
+  remote_user: root
+  roles:
+    - homelab

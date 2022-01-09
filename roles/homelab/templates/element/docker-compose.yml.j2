@@ -1,0 +1,15 @@
+version: '3.5'
+services:
+  element_app:
+    container_name: element_app
+    image: vectorim/element-web
+    networks:
+      - element
+    ports:
+      - 5050:80
+    volumes:
+      - ./data/app/config.json:/app/config.json
+
+networks:
+  element:
+    name: element

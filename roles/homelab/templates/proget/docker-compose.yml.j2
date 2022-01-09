@@ -1,0 +1,33 @@
+version: '3.5'
+services:
+  proget_app:
+    container_name: proget_app
+    image: proget.inedo.com/productimages/inedo/proget:6
+    restart: unless-stopped
+    networks:
+      - proget
+    ports:
+      - 5010:80
+    volumes:
+      - ./data/app:/var/proget/packages
+    environment:
+      SQL_CONNECTION_STRING: 'Data Source=proget_sql; Initial Catalog=database; User ID=sa; Password={{ proget_sql_password }}'
+      TZ: "America/Chicago"
+
+  proget_sql:
+    container_name: proget_sql
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: unless-stopped
+    networks:
+      - proget
+    volumes:
+      - ./data/sql:/var/opt/mssql/data
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "{{ proget_sql_password }}"
+      MSSQL_PID: "Express"
+    user: "root:root"
+
+networks:
+  proget:
+    name: proget

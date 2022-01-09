@@ -1,0 +1,10 @@
+- name: Copy templated scripts
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: '700'
+  loop: [
+    {"src": "scripts/restic-backup.j2", "dest": "/usr/local/bin/restic-backup"}
+  ]

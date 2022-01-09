@@ -1,0 +1,39 @@
+version: '3.5'
+services:
+  matrix_app:
+    container_name: matrix_app
+    image: matrixdotorg/synapse
+    restart: unless-stopped
+    networks:
+      - matrix
+    ports:
+      - 5020:8008
+    volumes:
+      - ./data/app:/data
+    user: root
+
+  matrix_postgres:
+    container_name: matrix_postgres
+    image: postgres:13
+    restart: unless-stopped
+    networks:
+      - matrix
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: '{{ matrix_postgres_password }}'
+      POSTGRES_USER: 'user'
+      POSTGRES_DB: 'database'
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+
+  # Synapse Admin
+  matrix_admin:
+    container_name: matrix_admin
+    image: awesometechnologies/synapse-admin
+    restart: unless-stopped
+    ports:
+      - 5021:80
+
+networks:
+  matrix:
+   name: matrix
