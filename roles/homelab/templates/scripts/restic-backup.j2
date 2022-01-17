@@ -8,90 +8,73 @@ export AWS_SECRET_ACCESS_KEY={{ restic_aws_secret_access_key | quote }}
 
 case "${1}" in
 	backup)
-    	temp_dir='/var/tmp/restic_backup'
-
-    	if [[ -e "${temp_dir}" ]]; then
-			echo "=== Removing backup directory..."
-			if ! rm -r "${temp_dir}" --interactive=never; then
-				echo "Failed to remove backup directory."
-				exit 1
-			fi
-		fi
-
-		echo "=== Creating backup directory..."
-		if ! mkdir -p "${temp_dir}"; then
-			echo "Failed to create backup directory."
-			exit 1
-		fi
-
-		mapfile -t directories < <(find /var/www/ -maxdepth 1 -type d -not -path '/var/www/')
+		mapfile -t directories < <(find '/var/www' -maxdepth 1 -type d -not -path '/var/www' -not -path '/var/www/mailcow.hunterwittenborn.com')
 
 		for i in "${directories[@]}"; do
+			cd "${i}"
+
 			failed_update=1
 			failed_stop=1
 			failed_start=1
+			dir="$(basename "${i}")"
 
-			echo "=== Backing up '${i}'..."
-			cd "${i}"
-		
-			if [[ -f './service.sh' ]]; then
-				echo "Updating services..."
-				./service.sh update && failed_update=0
-
-				if (( "${failed_update}" )); then
-					echo "Failed to update services. Skipping folder..."
-					continue
-				fi
-
-				echo "Stopping services..."
-				./service.sh stop && failed_stop=0
+			# Check.
+			if ! [[ -f './service.sh' ]]; then
+				echo "=== Skipping '${i}'..."
+				continue
+			else
+				echo "=== Backing up '${i}'..."
+			fi
 			
-				if (( "${failed_stop}" )); then
-					echo "Failed to stop services. Skipping folder..."
-					continue
-				fi
+			# Update.
+			echo "Updating services..."
+			./service.sh update && failed_update=0
+
+			if (( "${failed_update}" )); then
+				echo "Failed to update services. Skipping folder..."
+				continue
+			fi
+			
+			# Stop.
+			echo "Stopping services..."
+			./service.sh stop && failed_stop=0
+			
+			if (( "${failed_stop}" )); then
+				echo "Failed to stop services. Skipping folder..."
+				continue
+			fi
+			
+			# Backup.
+			extra_restic_opts=()
+
+			if [[ -n "${VERBOSE}" ]]; then
+				extra_restic_opts+=('--verbose')
 			fi
 
-			echo "Copying files to backup directory..."
-			dirname="$(basename "${i}")"
-			cp "${i}" "${temp_dir}/${dirname}" -R
+			echo "Backing up..."
+			if ! restic backup "${i}" --tag "${dir}" "${extra_restic_opts[@]}"; then
+				echo "Failed to back up."
+				continue
+			fi
 
-			if [[ -f './service.sh' ]]; then
-				echo "Bringing service back up..."
-				./service.sh start && failed_start=1
+			echo "Pruning backups..."
+			if ! restic forget --tag "${dir}" --keep-last 7 --keep-daily 7 --keep-weekly 3; then
+				echo "Failed to prune backups."
+				continue
+			fi
 
-				if (( "${failed_start}" )); then
-					echo "Failed to start services."
-				fi
+			# Start.
+			echo "Bringing service back up..."
+			./service.sh start && failed_start=0
+
+			if (( "${failed_start}" )); then
+				echo "Failed to start services."
 			fi
 		done
-
-		echo "=== Backing up to S3..."
-		if ! restic --verbose backup "${temp_dir}"; then
-			echo "Failed to backup to S3."
-			exit 1
-		fi
 
 		echo "=== Verifying backups..."
 		if ! restic check; then
 			echo "Backup verification failed."
-			exit 1
-		fi
-
-		echo "=== Running backup pruner..."
-		if ! restic forget --keep-last 7 --keep-daily 7 --keep-weekly 3; then
-			echo "Backup pruner failed..."
-		fi
-
-		echo "=== Verifying backups one last time..."
-		if ! restic check; then
-			echo "Backup verification failed."
-			exit 1
-		fi
-
-		echo "=== Removing temporary backup directory..."
-		if ! rm -r --interactive=never "${temp_dir}"; then
-			echo "Failed to remove backup directory."
 			exit 1
 		fi
 

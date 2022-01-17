@@ -29,7 +29,7 @@
     argv: ["./service.sh", "start"]
     chdir: "/var/www/proget.hunterwittenborn.com"
 
-- name: Wait for a succesfull connection to ProGet
+- name: Wait for a successful connection to ProGet
   register: result
   retries: 20
   until: "result.status == 200"
