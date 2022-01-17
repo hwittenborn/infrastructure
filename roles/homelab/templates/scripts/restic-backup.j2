@@ -7,9 +7,6 @@ export AWS_ACCESS_KEY_ID={{ restic_aws_access_key_id | quote }}
 export AWS_SECRET_ACCESS_KEY={{ restic_aws_secret_access_key | quote }}
 
 case "${1}" in
-	restore)
-		restic "${@}"
-		;;
 	backup)
     	temp_dir='/var/tmp/restic_backup'
 
@@ -99,6 +96,9 @@ case "${1}" in
 		fi
 
 		echo "=== Done!"
+		;;
+	*)
+		restic "${@}"
 		;;
 esac
 
