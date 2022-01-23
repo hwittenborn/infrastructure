@@ -1,3 +1,13 @@
+# Redirects.
+server {
+  server_name makedeb.hunterwittenborn.com;
+  listen 443 ssl;
+  return 301 https://www.makedeb.org/;
+
+  ssl_certificate /etc/letsencrypt/live/hunterwittenborn.com/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/hunterwittenborn.com/privkey.pem;
+}
+
 server {
   server_name makedeb.org;
   listen 443 ssl;
@@ -7,6 +17,7 @@ server {
   ssl_certificate_key /etc/letsencrypt/live/makedeb.org/privkey.pem;
 }
 
+# Actual site config.
 server {
   server_name www.makedeb.org;
   listen 443 ssl;

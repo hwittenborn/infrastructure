@@ -7,7 +7,6 @@ current_services:
   - html
   - hunterwittenborn.com
   - mailcow.hunterwittenborn.com
-  - makedeb.hunterwittenborn.com
   - matrix.hunterwittenborn.com
   - mpr.hunterwittenborn.com
   - nextcloud.hunterwittenborn.com
@@ -15,3 +14,4 @@ current_services:
   - shlink.hunterwittenborn.com
   - www.hunterwittenborn.com
   - makedeb.org
+  - docs.makedeb.org
