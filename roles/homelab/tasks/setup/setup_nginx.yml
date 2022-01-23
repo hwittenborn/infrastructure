@@ -11,7 +11,11 @@
   register: result
   changed_when: '"Certificate not yet due for renewal" not in result.stdout'
   ansible.builtin.command:
-    argv: ["certbot", "certonly", "--dns-cloudflare", "--dns-cloudflare-credentials", "/root/cloudflare-credentials.ini", "-nd", "*.{{ hw_url }}", "--cert-name", "{{ hw_url }}"]
+    argv: "{{ item }}"
+
+  loop:
+    - ["certbot", "certonly", "--dns-cloudflare", "--dns-cloudflare-credentials", "/root/cloudflare-credentials.ini", "-nd", "*.{{ hw_url }}", "-d", "{{ hw_url }}", "--cert-name", "{{ hw_url }}"]
+    - ["certbot", "certonly", "--dns-cloudflare", "--dns-cloudflare-credentials", "/root/cloudflare-credentials.ini", "-nd", "*.{{ makedeb_url }}", "-d", "{{ makedeb_url }}", "--cert-name", "{{ makedeb_url }}"]
 
 - name: Copy main NGINX configuration file
   ansible.builtin.copy:
