@@ -1,7 +1,14 @@
 - name: Install Cron config
+  tags: ["cron"]
   ansible.builtin.copy:
     src: server/cron/cron
     dest: /etc/cron.d/homelab
     owner: root
     group: root
     mode: '755'
+
+- name: Restart Cron systemd service
+  tags: ["cron", "never"]
+  ansible.builtin.systemd:
+    service: cron
+    state: restarted
