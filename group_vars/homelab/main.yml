@@ -15,3 +15,6 @@ current_services:
   - www.hunterwittenborn.com
   - makedeb.org
   - docs.makedeb.org
+
+website_dir: "/var/www"
+website_mnt_dir: "/mnt/homelab-main/websites"

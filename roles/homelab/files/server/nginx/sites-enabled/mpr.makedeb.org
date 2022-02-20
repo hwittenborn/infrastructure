@@ -1,5 +1,5 @@
 server {
-  server_name mpr.hunterwittenborn.com;
+  server_name mpr.hunterwittenborn.com dur.hunterwittenborn.com;
   listen 443 ssl;
   return 301 https://mpr.makedeb.org$request_uri;
 

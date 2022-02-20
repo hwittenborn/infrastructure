@@ -1,1 +1,4 @@
-00 03 root * * * restic-backup backup
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+SHELL=/bin/bash
+
+00 03 * * * root restic-backup backup

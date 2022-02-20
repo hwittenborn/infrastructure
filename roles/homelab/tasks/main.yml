@@ -62,17 +62,30 @@
   loop_control:
     label: "{{ item.path }}"
 
-- name: Setup services
-  include_tasks: "services/{{ service }}"
-  loop:
-    - proget.hunterwittenborn.com
-    - drone.hunterwittenborn.com
-    - nextcloud.hunterwittenborn.com
-    - matrix.hunterwittenborn.com
-    - element.hunterwittenborn.com
-    - shlink.hunterwittenborn.com
-  loop_control:
-    loop_var: service
+# Set up services.
+- name: Set up Proget
+  import_tasks: services/proget.hunterwittenborn.com
+  tags: ["proget"]
+
+- name: Set up Drone
+  import_tasks: services/drone.hunterwittenborn.com
+  tags: ["drone"]
+
+- name: Set up Nextcloud
+  import_tasks: services/nextcloud.hunterwittenborn.com
+  tags: ["nextcloud"]
+
+- name: Set up Matrix
+  import_tasks: services/matrix.hunterwittenborn.com
+  tags: ["matrix"]
+
+- name: Set up Element
+  import_tasks: services/element.hunterwittenborn.com
+  tags: ["element"]
+
+- name: Set up Shlink
+  import_tasks: services/shlink.hunterwittenborn.com
+  tags: ["shlink"]
 
 - name: Ensure needed systemd services are running
   ansible.builtin.systemd:
