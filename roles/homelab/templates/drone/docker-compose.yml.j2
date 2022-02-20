@@ -2,12 +2,12 @@ version: '3.5'
 services:
   drone_app:
     container_name: drone_app
-    image: drone/drone:2
+    image: proget.hunterwittenborn.com/docker/hwittenborn/drone:2.9.1
     restart: unless-stopped
     networks:
       - drone
     ports:
-      - 5040:80
+      - 5040:8080
     volumes:
       - ./data/app:/data
     environment:
