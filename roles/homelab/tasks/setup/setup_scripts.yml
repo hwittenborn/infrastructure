@@ -1,4 +1,5 @@
 - name: Copy templated scripts
+  tags: ["cron", "scripts"]
   ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -6,5 +7,6 @@
     group: root
     mode: '700'
   loop: [
-    {"src": "scripts/restic-backup.j2", "dest": "/usr/local/bin/restic-backup"}
+    {"src": "scripts/restic-backup.j2", "dest": "/usr/local/bin/restic-backup"},
+    {"src": "scripts/docker-pruner.j2", "dest": "/usr/local/bin/docker-pruner"}
   ]
