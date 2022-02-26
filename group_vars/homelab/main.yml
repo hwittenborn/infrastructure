@@ -1,4 +1,5 @@
 current_services:
+  - apps
   - bitwarden.hunterwittenborn.com
   - cdn.hunterwittenborn.com
   - docs.hunterwittenborn.com
@@ -8,7 +9,7 @@ current_services:
   - hunterwittenborn.com
   - mailcow.hunterwittenborn.com
   - matrix.hunterwittenborn.com
-  - mpr.hunterwittenborn.com
+  - mpr.makedeb.org
   - nextcloud.hunterwittenborn.com
   - proget.hunterwittenborn.com
   - shlink.hunterwittenborn.com
