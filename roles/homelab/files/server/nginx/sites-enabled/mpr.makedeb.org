@@ -11,8 +11,7 @@ server {
   server_name mpr.makedeb.org;
   listen 443 ssl;
   location / {
-    proxy_pass https://localhost:8444;
-    proxy_ssl_verify off;
+    proxy_pass http://localhost:8080;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
   }
