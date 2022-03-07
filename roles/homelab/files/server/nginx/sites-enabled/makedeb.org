@@ -4,8 +4,8 @@ server {
   listen 443 ssl;
   return 301 https://www.makedeb.org/;
 
-  ssl_certificate /etc/letsencrypt/live/hunterwittenborn.com/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/hunterwittenborn.com/privkey.pem;
+  ssl_certificate /etc/letsencrypt/live/homelab/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/homelab/privkey.pem;
 }
 
 server {
@@ -13,8 +13,8 @@ server {
   listen 443 ssl;
   return 301 https://www.makedeb.org$request_uri;
 
-  ssl_certificate /etc/letsencrypt/live/makedeb.org/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/makedeb.org/privkey.pem;
+  ssl_certificate /etc/letsencrypt/live/homelab/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/homelab/privkey.pem;
 }
 
 # Actual site config.
@@ -25,6 +25,6 @@ server {
   # We still need to implement a 404 page in Hugo.
   #error_page 404 /404.html;
   
-  ssl_certificate /etc/letsencrypt/live/makedeb.org/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/makedeb.org/privkey.pem;
+  ssl_certificate /etc/letsencrypt/live/homelab/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/homelab/privkey.pem;
 }

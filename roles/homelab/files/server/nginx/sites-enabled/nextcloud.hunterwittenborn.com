@@ -13,6 +13,6 @@ server {
   rewrite /.well-known/carddav    /remote.php/dav;
   rewrite /.well-known/caldav     /remote.php/dav;
 
-  ssl_certificate /etc/letsencrypt/live/hunterwittenborn.com/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/hunterwittenborn.com/privkey.pem;
+  ssl_certificate /etc/letsencrypt/live/homelab/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/homelab/privkey.pem;
 }

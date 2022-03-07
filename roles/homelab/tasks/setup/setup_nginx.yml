@@ -8,14 +8,12 @@
 
 # We're gonna do wildcard certificates later, but we accidentally maxed out those certs until the 8th due to too many cert requests during testing.
 - name: Refresh installed Certbot certs if close to expiry (or not present)
+  tags: ["certbot", "nginx"]
   register: result
   changed_when: '"Certificate not yet due for renewal" not in result.stdout'
   ansible.builtin.command:
-    argv: "{{ item }}"
-
-  loop:
-    - ["certbot", "certonly", "--dns-cloudflare", "--dns-cloudflare-credentials", "/root/cloudflare-credentials.ini", "-nd", "*.{{ hw_url }}", "-d", "{{ hw_url }}", "--cert-name", "{{ hw_url }}"]
-    - ["certbot", "certonly", "--dns-cloudflare", "--dns-cloudflare-credentials", "/root/cloudflare-credentials.ini", "-nd", "*.{{ makedeb_url }}", "-d", "{{ makedeb_url }}", "--cert-name", "{{ makedeb_url }}"]
+    argv: ["certbot", "certonly", "--dns-cloudflare", "--dns-cloudflare-credentials", "/root/cloudflare-credentials.ini", "-n",
+           "-d", "*.{{ hw_url }}", "-d", "{{ hw_url }}", "-d", "*.{{ makedeb_url }}", "-d", "{{ makedeb_url }}", "--cert-name", "homelab"]
 
 - name: Copy main NGINX configuration file
   ansible.builtin.copy:

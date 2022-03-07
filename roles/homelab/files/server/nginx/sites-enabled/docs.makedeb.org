@@ -4,6 +4,6 @@ server {
   root /var/www/docs.makedeb.org/;
   error_page 404 /404.html;
 
-  ssl_certificate /etc/letsencrypt/live/makedeb.org/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/makedeb.org/privkey.pem;
+  ssl_certificate /etc/letsencrypt/live/homelab/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/homelab/privkey.pem;
 }
