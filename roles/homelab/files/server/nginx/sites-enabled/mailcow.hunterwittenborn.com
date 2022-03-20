@@ -2,9 +2,6 @@ server {
   listen 443 ssl http2;
   listen [::]:443 ssl http2;
   
-  allow 173.21.54.87;
-  deny all;
-
   server_name mailcow.hunterwittenborn.com autodiscover.hunterwittenborn.com autoconfig.hunterwittenborn.com;
 
   ssl_session_timeout 1d;
