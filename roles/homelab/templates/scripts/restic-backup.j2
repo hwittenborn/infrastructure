@@ -6,9 +6,11 @@ export RESTIC_PASSWORD={{ restic_password | quote }}
 export AWS_ACCESS_KEY_ID={{ restic_aws_access_key_id | quote }}
 export AWS_SECRET_ACCESS_KEY={{ restic_aws_secret_access_key | quote }}
 
+backup_dirs=('/var/www' '/mnt/homelab-main/websites')
+
 case "${1}" in
 	backup)
-		mapfile -t directories < <(find '/var/www' -maxdepth 1 -type d -not -path '/var/www' -not -path '/var/www/mailcow.hunterwittenborn.com')
+		mapfile -t directories < <(find "${backup_dirs[@]}" -mindepth 1 -maxdepth 1 -type d)
 
 		for i in "${directories[@]}"; do
 			cd "${i}"
