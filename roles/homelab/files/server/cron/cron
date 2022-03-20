@@ -2,4 +2,5 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/us
 SHELL=/bin/bash
 
 00 03 * * * root restic-backup backup
-00 02 * * * docker-pruner
+00 02 * * * root docker-pruner
+@reboot root start-services

@@ -8,5 +8,6 @@
     mode: '700'
   loop: [
     {"src": "scripts/restic-backup.j2", "dest": "/usr/local/bin/restic-backup"},
-    {"src": "scripts/docker-pruner.j2", "dest": "/usr/local/bin/docker-pruner"}
+    {"src": "scripts/docker-pruner.j2", "dest": "/usr/local/bin/docker-pruner"},
+    {"src": "scripts/start-services.j2", "dest": "/usr/local/bin/start-services"}
   ]

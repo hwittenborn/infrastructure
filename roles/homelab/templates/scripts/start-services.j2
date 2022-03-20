@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+set -e
+
+# Define directories containing services.
+service_dirs=('/var/www/' '/mnt/homelab-main/websites/')
+
+# Get a list of all services.
+mapfile -t services < <(find "${service_dirs[@]}" -mindepth 1 -maxdepth 1 -type d)
+
+# Go through each folder and start the service if it contains a 'service.sh' file.
+for service in "${services[@]}"; do
+    cd "${service}/"
+
+    if [[ -f './service.sh' ]]; then
+        ./service.sh start
+    fi
+done
+
+# vim: set sw=4 expandtab:
