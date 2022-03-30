@@ -1,0 +1,11 @@
+DRONE_RPC_PROTO=https
+DRONE_RPC_HOST=drone.{{ hw_url }}
+DRONE_RPC_SECRET={{ drone_rpc_secret }}
+DRONE_LIMIT_EVENTS=push,custom
+DRONE_LIMIT_REPS=makedeb/mprweb
+DRONE_LOG_FILE=/var/log/drone-runner-exec/log.txt
+DRONE_ENV_PLUGIN_ENDPOINT=https://drone-env.{{ hw_url }}
+DRONE_ENV_PLUGIN_TOKEN={{ drone_env_plugin_token }}
+DRONE_RUNNER_LABELS=server:mprweb
+DRONE_RUNNER_NAME=mprweb
+DRONE_RUNNER_PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin

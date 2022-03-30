@@ -2,7 +2,7 @@
   changed_when: False
   ansible.builtin.command:
     argv: ["./service.sh", "stop"]
-    chdir: "{{ website_mnt_dir }}/proget.hunterwittenborn.com"
+    chdir: "{{ website_dir }}/proget.hunterwittenborn.com"
     removes: "./service.sh"
 
 - name: Copy ProGet service files
@@ -13,21 +13,21 @@
     group: "{{ item.owner }}"
     mode: "{{ item.mode }}"
   loop: [
-    {"src": "proget/docker-compose.yml.j2", "dest": "{{ website_mnt_dir }}/proget.hunterwittenborn.com/docker-compose.yml", "owner": "root", "mode": "600"},
-    {"src": "proget/service.sh.j2", "dest": "{{ website_mnt_dir }}/proget.hunterwittenborn.com/service.sh", "owner": "root", "mode": "755"}
+    {"src": "proget/docker-compose.yml.j2", "dest": "{{ website_dir }}/proget.hunterwittenborn.com/docker-compose.yml", "owner": "root", "mode": "600"},
+    {"src": "proget/service.sh.j2", "dest": "{{ website_dir }}/proget.hunterwittenborn.com/service.sh", "owner": "root", "mode": "755"}
   ]
 
 - name: Update ProGet
   changed_when: False
   ansible.builtin.command:
     argv: ["./service.sh", "update"]
-    chdir: "{{ website_mnt_dir }}/proget.hunterwittenborn.com"
+    chdir: "{{ website_dir }}/proget.hunterwittenborn.com"
 
 - name: Bring ProGet up
   changed_when: False
   ansible.builtin.command:
     argv: ["./service.sh", "start"]
-    chdir: "{{ website_mnt_dir }}/proget.hunterwittenborn.com"
+    chdir: "{{ website_dir }}/proget.hunterwittenborn.com"
 
 - name: Wait for a successful connection to ProGet
   register: result

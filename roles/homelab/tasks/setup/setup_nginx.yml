@@ -1,11 +1,3 @@
-- name: Copy Cloudflare Certbot credentials file
-  ansible.builtin.template:
-    src: cloudflare/cloudflare-credentials.ini.j2
-    dest: /root/cloudflare-credentials.ini
-    owner: root
-    group: root
-    mode: '600'
-
 # We're gonna do wildcard certificates later, but we accidentally maxed out those certs until the 8th due to too many cert requests during testing.
 - name: Refresh installed Certbot certs if close to expiry (or not present)
   tags: ["certbot", "nginx"]

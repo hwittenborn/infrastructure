@@ -16,9 +16,6 @@
   import_tasks: setup/setup_nginx.yml
   tags: ["nginx"]
 
-- name: Setup APT
-  import_tasks: setup/setup_apt.yml
-
 # We need to implement checking if any cron jobs are running themselves, and abort if so.
 - name: Ensure systemd services are properly configured
   ansible.builtin.systemd:
@@ -29,12 +26,6 @@
     {"name": "docker", "state": "started"},
     {"name": "nginx", "state": "started"}
   ]
-
-- name: Install scripts
-  import_tasks: setup/setup_scripts.yml
-
-- name: Install Cron jobs
-  import_tasks: setup/setup_cron.yml
 
 - name: Find list of services currently on the server
   register: services

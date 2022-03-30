@@ -1,0 +1,35 @@
+- name: Ensure needed packages are installed
+  tags: ["apt"]
+  ansible.builtin.apt:
+    update_cache: yes
+    state: latest
+    pkg:
+      - certbot
+      - python3-certbot-dns-cloudflare
+      - nginx
+      - neovim
+      - docker.io
+      - docker-compose
+      - restic
+
+- name: Install needed Certbot certs
+  tags: ["certbot"]
+  register: result
+  changed_when: '"Certificate not yet due for renewal" not in result.stdout'
+  ansible.builtin.command:
+    argv: ["certbot", "certonly", "--dns-cloudflare", "--dns-cloudflare-credentials", "/root/cloudflare-credentials.ini", "-n", "-d", "mailcow.{{ hw_url }}"]
+
+- name: Copy NGINX config
+  tags: ["nginx"]
+  ansible.builtin.template:
+    src: nginx/mailcow.hunterwittenborn.com
+    dest: /etc/nginx/sites-enabled/mailcow.hunterwittenborn.com
+    owner: root
+    group: root
+    mode: '700'
+
+- name: Restart NGINX systemd service
+  tags: ["nginx"]
+  ansible.builtin.systemd:
+    name: nginx
+    state: restarted

@@ -1,0 +1,8 @@
+- name: Copy Cloudflare Certbot credentials file
+  tags: ["cloudflare"]
+  ansible.builtin.template:
+    src: cloudflare/cloudflare-credentials.ini.j2
+    dest: /root/cloudflare-credentials.ini
+    owner: root
+    group: root
+    mode: '600'

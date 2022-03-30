@@ -1,0 +1,8 @@
+- name: Ensure needed APT repositories are present
+  tags: ["apt"]
+  ansible.builtin.apt_repository:
+    repo: "{{ item }}"
+    state: present
+  loop: [
+    "deb [trusted=yes] https://hwittenborn.github.io/server-packages ./"
+  ]

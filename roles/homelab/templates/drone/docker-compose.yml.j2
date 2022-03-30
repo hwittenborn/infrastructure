@@ -72,6 +72,8 @@ services:
     restart: unless-stopped
     networks:
       - drone
+    ports:
+      - 5041:8080
     volumes:
       - ./data/drone_global_env/config.yaml:/data/config.yaml
     environment:

@@ -1,0 +1,52 @@
+- name: Ensure needed packages are installed
+  tags: ["apt"]
+  ansible.builtin.apt:
+    update_cache: yes
+    state: latest
+    pkg:
+      - certbot
+      - python3-certbot-dns-cloudflare
+      - nginx
+      - neovim
+      - docker.io
+      - docker-compose
+      - drone-runner-exec
+      - restic
+
+- name: Create directory for Drone Exec Runner config if it doesn't exist
+  tags: ["drone"]
+  ansible.builtin.file:
+    path: /etc/drone-runner-exec
+    state: directory
+    mode: '755'
+
+- name: Copy Drone Exec Runner config
+  tags: ["drone"]
+  ansible.builtin.template:
+    src: drone-runner-exec/config
+    dest: /etc/drone-runner-exec/config
+    owner: root
+    group: root
+    mode: '700'
+
+- name: Install needed Certbot certs
+  tags: ["certbot"]
+  register: result
+  changed_when: '"Certificate not yet due for renewal" not in result.stdout'
+  ansible.builtin.command:
+    argv: ["certbot", "certonly", "--dns-cloudflare", "--dns-cloudflare-credentials", "/root/cloudflare-credentials.ini", "-n", "-d", "mpr.{{ makedeb_url }}"]
+
+- name: Copy NGINX config
+  tags: ["nginx"]
+  ansible.builtin.template:
+    src: nginx/mpr.makedeb.org
+    dest: /etc/nginx/sites-enabled/mpr.makedeb.org
+    owner: root
+    group: root
+    mode: '700'
+
+- name: Restart NGINX systemd service
+  tags: ["nginx"]
+  ansible.builtin.systemd:
+    name: nginx
+    state: restarted

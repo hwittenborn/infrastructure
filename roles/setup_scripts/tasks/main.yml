@@ -1,5 +1,5 @@
 - name: Copy templated scripts
-  tags: ["cron", "scripts"]
+  tags: ["scripts"]
   ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"

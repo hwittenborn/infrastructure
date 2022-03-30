@@ -1,4 +1,14 @@
 [homelab]
 hunterwittenborn.com
 
+[mpr]
+mpr
+
+[mailcow]
+mailcow.hunterwittenborn.com
+
+[drone]
+hunterwittenborn.com
+mpr
+
 # vim: set syntax=toml noet:
