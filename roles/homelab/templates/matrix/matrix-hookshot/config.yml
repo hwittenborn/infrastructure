@@ -53,6 +53,10 @@ permissions:
     services:
       - service: "github"
         level: admin
+  - actor: "@leo:fedora.im"
+    services:
+      - service: "github"
+        level: login
 
 listeners:
   # (Optional) HTTP Listener configuration.
