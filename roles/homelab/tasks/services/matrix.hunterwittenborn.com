@@ -1,3 +1,4 @@
+# Matrix.
 - name: Stop Matrix if it's currently running
   changed_when: False
   ansible.builtin.command:
@@ -18,6 +19,29 @@
     {"src": "matrix/homeserver.yaml.j2", "dest": "{{ website_dir }}/matrix.hunterwittenborn.com/data/app/homeserver.yaml", "owner": "root", "mode": "644"}
   ]
 
+# Matrix Hookshot.
+- name: Ensure directory for Matrix Hookshot exists
+  ansible.builtin.file:
+    path: "{{ website_dir }}/matrix.hunterwittenborn.com/data/matrix-hookshot"
+    state: directory
+    mode: '755'
+
+- name: Copy Matrix Hookshot service files
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "644"
+  loop: [
+    {"src": "matrix/matrix-hookshot/config.yml", "dest": "{{ website_dir }}/matrix.hunterwittenborn.com/data/matrix-hookshot/config.yml"},
+    {"src": "matrix/matrix-hookshot/registration.yml", "dest": "{{ website_dir }}/matrix.hunterwittenborn.com/data/matrix-hookshot/registration.yml"},
+    {"src": "matrix/matrix-hookshot/github-key.pem", "dest": "{{ website_dir }}/matrix.hunterwittenborn.com/data/matrix-hookshot/github-key.pem"},
+    {"src": "matrix/matrix-hookshot/passkey.pem", "dest": "{{ website_dir }}/matrix.hunterwittenborn.com/data/matrix-hookshot/passkey.pem"},
+    {"src": "matrix/matrix-hookshot/registration.yml", "dest": "{{ website_dir }}/matrix.hunterwittenborn.com/data/app/matrix-hookshot-registration.yml"}
+  ]
+
+# Back to Matrix.
 - name: Update Matrix
   changed_when: False
   ansible.builtin.command:

@@ -7,7 +7,7 @@ services:
     networks:
       - matrix
     ports:
-      - 5020:8008
+      - 127.0.0.1:5020:8008
     volumes:
       - ./data/app:/data
     user: root
@@ -32,7 +32,18 @@ services:
     image: awesometechnologies/synapse-admin
     restart: unless-stopped
     ports:
-      - 5021:80
+      - 127.0.0.1:5021:80
+
+  # Matrix Hookshot.
+  matrix-hookshot:
+    image: halfshot/matrix-hookshot
+    restart: unless-stopped
+    networks:
+      - matrix
+    ports:
+      - 127.0.0.1:5022:9000
+    volumes:
+      - ./data/matrix-hookshot:/data
 
 networks:
   matrix:

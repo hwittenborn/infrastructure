@@ -6,7 +6,7 @@ export RESTIC_PASSWORD={{ restic_password | quote }}
 export AWS_ACCESS_KEY_ID={{ restic_aws_access_key_id | quote }}
 export AWS_SECRET_ACCESS_KEY={{ restic_aws_secret_access_key | quote }}
 
-backup_dirs=('/var/www' '/mnt/homelab-main/websites')
+backup_dirs=('/var/www')
 
 case "${1}" in
 	backup)
@@ -59,12 +59,6 @@ case "${1}" in
 				continue
 			fi
 
-			echo "Pruning backups..."
-			if ! restic forget --tag "${dir}" --keep-last 7 --keep-daily 7 --keep-weekly 3; then
-				echo "Failed to prune backups."
-				continue
-			fi
-
 			# Start.
 			echo "Bringing service back up..."
 			./service.sh start && failed_start=0
@@ -73,12 +67,6 @@ case "${1}" in
 				echo "Failed to start services."
 			fi
 		done
-
-		echo "=== Verifying backups..."
-		if ! restic check; then
-			echo "Backup verification failed."
-			exit 1
-		fi
 
 		echo "=== Done!"
 		;;

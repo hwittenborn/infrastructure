@@ -7,7 +7,7 @@ services:
     networks:
       - nextcloud
     ports:
-      - 5030:80
+      - 127.0.0.1:5030:80
     volumes:
       - ./data/app:/var/www/html
     environment:

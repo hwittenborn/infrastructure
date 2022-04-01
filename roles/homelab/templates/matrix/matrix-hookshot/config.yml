@@ -1,0 +1,71 @@
+# This is an example configuration file
+
+bridge:
+  # Basic homeserver configuration
+  domain: {{ hw_url }}
+  url: https://matrix.{{ hw_url }}
+  mediaUrl: https://matrix.{{ hw_url }}
+  port: 9993
+  bindAddress: 0.0.0.0
+
+github:
+  # (Optional) Configure this to enable GitHub support
+  auth:
+    # Authentication for the GitHub App.
+    id: {{ matrix_hookshot_github_app_id }}
+    privateKeyFile: /data/github-key.pem
+  webhook:
+    # Webhook settings for the GitHub app.
+    secret: {{ matrix_hookshot_github_wekbook_secret }}
+  oauth:
+    # (Optional) Settings for allowing users to sign in via OAuth.
+    client_id: {{ matrix_hookshot_github_client_id }}
+    client_secret: {{ matrix_hookshot_github_client_secret }}
+    redirect_uri: https://matrix-hookshot.{{ hw_url }}/oauth
+  defaultOptions:
+    # (Optional) Default options for GitHub connections.
+    showIssueRoomLink: true
+
+passFile:
+  # A passkey used to encrypt tokens stored inside the bridge.
+  # Run openssl genpkey -out passkey.pem -outform PEM -algorithm RSA -pkeyopt rsa_keygen_bits:4096 to generate
+  /data/passkey.pem
+
+bot:
+  # (Optional) Define profile information for the bot user
+  displayname: GitHub Bot
+  avatar: mxc://half-shot.uk/2876e89ccade4cb615e210c458e2a7a6883fe17d
+
+metrics:
+  # (Optional) Prometheus metrics support
+  enabled: false
+
+logging:
+  # (Optional) Logging settings. You can have a severity debug,info,warn,error
+  level: info
+  colorize: true
+  json: false
+  timestampFormat: HH:mm:ss:SSS
+
+permissions:
+  # (Optional) Permissions for using the bridge. See docs/setup.md#permissions for help
+  - actor: "@hunter:{{ hw_url }}"
+    services:
+      - service: "github"
+        level: admin
+
+listeners:
+  # (Optional) HTTP Listener configuration.
+  # Bind resource endpoints to ports and addresses.
+  # 'port' must be specified. Each listener must listen on a unique port.
+  # 'bindAddress' will default to '127.0.0.1' if not specified, which may not be suited to Docker environments.
+  # 'resources' may be any of webhooks, widgets, metrics, provisioning
+  - port: 9000
+    bindAddress: 0.0.0.0
+    resources:
+      - webhooks
+  - port: 9001
+    bindAddress: 127.0.0.1
+    resources:
+      - metrics
+      - provisioning

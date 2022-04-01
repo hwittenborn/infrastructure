@@ -78,6 +78,10 @@
   import_tasks: services/shlink.hunterwittenborn.com
   tags: ["shlink"]
 
+- name: Set up hunterwittenborn.com
+  import_tasks: services/hunterwittenborn.com
+  tags: ["hunterwittenborn.com"]
+
 - name: Ensure needed systemd services are running
   ansible.builtin.systemd:
     service: "{{ item }}"

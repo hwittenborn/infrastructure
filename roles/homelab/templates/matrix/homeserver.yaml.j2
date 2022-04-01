@@ -92,7 +92,7 @@ pid_file: /data/homeserver.pid
 # If set to 'true', allows any other homeserver to fetch the server's public
 # rooms directory via federation. Defaults to 'false'.
 #
-#allow_public_rooms_over_federation: true
+allow_public_rooms_over_federation: true
 
 # The default room version for newly created rooms.
 #
@@ -1437,6 +1437,7 @@ report_stats: true
 # A list of application service config files to use
 #
 app_service_config_files:
+  - /data/matrix-hookshot-registration.yml
 #  - app_service_1.yaml
 #  - app_service_2.yaml
 

@@ -1,0 +1,21 @@
+id: matrix-hookshot # This can be anything, but must be unique within your homeserver
+as_token: {{ matrix_hookshot_as_token }} # This again can be a random string
+hs_token: {{ matrix_hookshot_hs_token }} # ..as can this
+namespaces:
+  rooms: []
+  users: # In the following, foobar is your homeserver's domain
+    - regex: "@_github_.*:{{ hw_url }}"
+      exclusive: true
+    - regex: "@_gitlab_.*:{{ hw_url }}"
+      exclusive: true
+    - regex: "@_jira_.*:{{ hw_url }}"
+      exclusive: true
+    - regex: "@_webhooks_.*:{{ hw_url }}" # Where _webhooks_ is set by userIdPrefix in config.yml
+      exclusive: true
+  aliases:
+    - regex: "#github_.+:{{ hw_url }}" # Where foobar is your homeserver's domain
+      exclusive: true
+
+sender_localpart: hookshot
+url: "http://matrix-hookshot:9993" # This should match the bridge.port in your config file
+rate_limited: false

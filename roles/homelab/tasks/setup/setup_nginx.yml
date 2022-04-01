@@ -1,6 +1,6 @@
 # We're gonna do wildcard certificates later, but we accidentally maxed out those certs until the 8th due to too many cert requests during testing.
 - name: Refresh installed Certbot certs if close to expiry (or not present)
-  tags: ["certbot", "nginx"]
+  tags: ["certbot"]
   register: result
   changed_when: '"Certificate not yet due for renewal" not in result.stdout'
   ansible.builtin.command:
@@ -8,8 +8,8 @@
            "-d", "*.{{ hw_url }}", "-d", "{{ hw_url }}", "-d", "*.{{ makedeb_url }}", "-d", "{{ makedeb_url }}", "--cert-name", "homelab"]
 
 - name: Copy main NGINX configuration file
-  ansible.builtin.copy:
-    src: server/nginx/nginx.conf
+  ansible.builtin.template:
+    src: nginx/nginx.conf
     dest: /etc/nginx/nginx.conf
     owner: root
     mode: '644'
@@ -17,10 +17,31 @@
 
 - name: Copy NGINX service files to server
   changed_when: False
-  ansible.posix.synchronize:
-    src: server/nginx/sites-enabled/
-    dest: /etc/nginx/sites-enabled/
-    rsync_opts: ["--delete"]
+  ansible.builtin.template:
+    src: "nginx/sites-enabled/{{ item }}"
+    dest: "/etc/nginx/sites-enabled/{{ item }}"
+    owner: root
+    group: root
+    mode: '644'
+  loop:
+    - all
+    - api.hunterwittenborn.com
+    - bitwarden.hunterwittenborn.com
+    - cdn.hunterwittenborn.com
+    - docs.hunterwittenborn.com
+    - docs.makedeb.org
+    - drone.hunterwittenborn.com
+    - element.hunterwittenborn.com
+    - hunterwittenborn.com
+    - makedeb.org
+    - matrix-admin.hunterwittenborn.com
+    - matrix.hunterwittenborn.com
+    - mpr.makedeb.org
+    - nextcloud.hunterwittenborn.com
+    - proget.hunterwittenborn.com
+    - shlink-admin.hunterwittenborn.com
+    - shlink.hunterwittenborn.com
+    - www.hunterwittenborn.com
 
 - name: List NGINX service files on server
   register: nginx_configs
