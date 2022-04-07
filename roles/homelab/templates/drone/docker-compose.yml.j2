@@ -1,5 +1,6 @@
 version: '3.5'
 services:
+  # Drone server.
   drone_app:
     container_name: drone_app
     image: drone/drone:2
@@ -36,7 +37,8 @@ services:
       # Validation extension
       DRONE_VALIDATE_PLUGIN_ENDPOINT: "http://drone_global_triggers:8080"
       DRONE_VALIDATE_PLUGIN_SECRET: {{ drone_validate_plugin_secret }}
-
+  
+  # Drone Docker runner.
   drone_docker:
     container_name: drone_docker
     image: drone/drone-runner-docker:1
@@ -55,6 +57,30 @@ services:
       # Extension: Global environment config
       DRONE_ENV_PLUGIN_ENDPOINT: 'http://drone_global_env:8080'
       DRONE_ENV_PLUGIN_TOKEN: {{ drone_env_plugin_token }}
+
+  # Drone Autoscaler.
+  drone_autoscaler:
+    container_name: drone_autoscaler
+    image: drone/autoscaler
+    restart: unless-stopped
+    networks:
+      - drone
+    volumes:
+      - ./data/drone_autoscaler:/data
+    environment:
+      - "DRONE_POOL_MIN=1"
+      - "DRONE_POOL_MAX=3"
+      - "DRONE_INTERVAL=1m"
+      - "DRONE_SERVER_PROTO=https"
+      - "DRONE_SERVER_HOST=drone.{{ hw_url }}"
+      - "DRONE_SERVER_TOKEN={{ drone_machine_user_token }}"
+      - "DRONE_AGENT_TOKEN={{ drone_rpc_secret }}"
+      - "DRONE_AGENT_CONCURRENCY=6"
+      - "DRONE_AGENT_LABELS=server:prebuilt-mpr"
+      - "DRONE_HETZNERCLOUD_DATACETNER=ash-dc1"
+      - "DRONE_HETZNERCLOUD_SSHKEY=6071249"
+      - "DRONE_HETZNERCLOUD_TOKEN={{ drone_hetzner_api_token }}"
+      - "DRONE_HETZNERCLOUD_TYPE=cx31"
 
   drone_global_triggers:
     container_name: drone_global_triggers

@@ -10,3 +10,9 @@ server {
   ssl_certificate /etc/letsencrypt/live/mpr.makedeb.org/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/mpr.makedeb.org/privkey.pem;
 }
+
+server {
+        server_name _;
+        listen 80;
+        return 301 https://$host$request_uri;
+}

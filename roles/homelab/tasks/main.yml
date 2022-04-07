@@ -1,16 +1,18 @@
 - name: Ensure needed packages are installed
+  tags: ["apt"]
   ansible.builtin.apt:
     state: present
     pkg:
       - certbot
       - cron
-      - docker
+      - docker.io
       - docker-compose
       - gpg
       - nginx
       - python3-certbot-dns-cloudflare
       - restic
-      - wget
+      - neovim
+      - drone-runner-exec
 
 - name: Setup NGINX
   import_tasks: setup/setup_nginx.yml
