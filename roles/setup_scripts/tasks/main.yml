@@ -1,3 +1,30 @@
+- name: Make sure needed packages are installed
+  tags: ["scripts"]
+  ansible.builtin.apt:
+    state: present
+    pkg:
+      - restic
+      - rclone
+
+- name: Create secret hash for Rclone
+  tags: ["scripts"]
+  register: secret
+  ansible.builtin.command:
+    argv: ["rclone", "obscure", "{{ restic_rclone_webdav_password }}"]
+
+- name: Setup Rclone config
+  tags: ["scripts"]
+  ansible.builtin.command:
+    argv: [
+      "rclone", "config", "create",
+      "restic-backup", "webdav",
+      "type", "webdav",
+      "url", "https://u298543.your-storagebox.de",
+      "user", "u298543",
+      "pass", "{{ secret.stdout }}",
+      "vendor", "other"
+    ]
+
 - name: Copy templated scripts
   tags: ["scripts"]
   ansible.builtin.template:
