@@ -18,6 +18,7 @@ case "${1}" in
 			failed_update=1
 			failed_stop=1
 			failed_start=1
+			failed_backup_prepare=1
 			dir="$(basename "${i}")"
 
 			# Check.
@@ -43,6 +44,15 @@ case "${1}" in
 			
 			if (( "${failed_stop}" )); then
 				echo "Failed to stop services. Skipping folder..."
+				continue
+			fi
+
+			# Prepare for backups.
+			echo "Preparing for backups..."
+			./service.sh backup-prepare && failed_backup_prepare=0
+
+			if (( "${failed_backup_prepare}" )); then
+				echo "Failed to prepare for backups. Skipping folder..."
 				continue
 			fi
 			
