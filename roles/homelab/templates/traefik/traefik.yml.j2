@@ -1,6 +1,8 @@
 entryPoints:
   web:
     address: :6000
+    forwardedHeaders:
+      insecure: true
 
 providers:
   docker:
