@@ -1,0 +1,10 @@
+entryPoints:
+  web:
+    address: :6000
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+
+# vim: set syntax=yaml sw=2 expandtab:

@@ -68,6 +68,10 @@
   import_tasks: services/nextcloud.hunterwittenborn.com
   tags: ["nextcloud"]
 
+- name: Set up Bitwarden
+  import_tasks: services/bitwarden.hunterwittenborn.com
+  tags: ["bitwarden"]
+
 - name: Set up Matrix
   import_tasks: services/matrix.hunterwittenborn.com
   tags: ["matrix"]
@@ -79,6 +83,10 @@
 - name: Set up Shlink
   import_tasks: services/shlink.hunterwittenborn.com
   tags: ["shlink"]
+
+- name: Set up Traefik
+  import_tasks: services/traefik.hunterwittenborn.com
+  tags: ["traefik"]
 
 - name: Set up hunterwittenborn.com
   import_tasks: services/hunterwittenborn.com

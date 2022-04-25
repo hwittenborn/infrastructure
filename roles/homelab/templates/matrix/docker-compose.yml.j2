@@ -4,20 +4,17 @@ services:
     container_name: matrix_app
     image: matrixdotorg/synapse
     restart: unless-stopped
-    networks:
-      - matrix
-    ports:
-      - 127.0.0.1:5020:8008
     volumes:
       - ./data/app:/data
     user: root
+    labels:
+      - "traefik.http.routers.matrix_app.rule=Host(`matrix.{{ hw_url }}`)"
+      - "traefik.enable=true"
 
   matrix_postgres:
     container_name: matrix_postgres
     image: postgres:13
     restart: unless-stopped
-    networks:
-      - matrix
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
     environment:
@@ -31,22 +28,19 @@ services:
     container_name: matrix_admin
     image: awesometechnologies/synapse-admin
     restart: unless-stopped
-    ports:
-      - 127.0.0.1:5021:80
+    labels:
+      - "traefik.http.routers.matrix_admin.rule=Host(`matrix-admin.{{ hw_url }}`)"
+      - "traefik.enable=true"
 
   # Matrix Hookshot.
   matrix-hookshot:
     image: halfshot/matrix-hookshot
     restart: unless-stopped
-    networks:
-      - matrix
-    ports:
-      - 127.0.0.1:5022:9000
     volumes:
       - ./data/matrix-hookshot:/data
+    labels:
+      - "traefik.http.routers.matrix-hookshot.rule=Host(`matrix-hookshot.{{ hw_url }}`)"
+      - "traefik.enable=true"
 
-networks:
-  matrix:
-   name: matrix
 
 # vim: set syntax=yaml ts=2 sw=2 expandtab:

@@ -5,10 +5,6 @@ services:
     container_name: drone_app
     image: drone/drone:2
     restart: unless-stopped
-    networks:
-      - drone
-    ports:
-      - 127.0.0.1:5040:80
     volumes:
       - ./data/app:/data
     environment:
@@ -37,14 +33,15 @@ services:
       # Validation extension
       DRONE_VALIDATE_PLUGIN_ENDPOINT: "http://drone_global_triggers:8080"
       DRONE_VALIDATE_PLUGIN_SECRET: {{ drone_validate_plugin_secret }}
+    labels:
+      - "traefik.http.routers.drone_app.rule=Host(`drone.{{ hw_url }}`)"
+      - "traefik.enable=true"
   
   # Drone Docker runner.
   drone_docker:
     container_name: drone_docker
     image: drone/drone-runner-docker:1
     restart: unless-stopped
-    networks:
-      - drone
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
@@ -63,8 +60,6 @@ services:
     container_name: drone_autoscaler
     image: drone/autoscaler
     restart: unless-stopped
-    networks:
-      - drone
     volumes:
       - ./data/drone_autoscaler:/data
     environment:
@@ -86,8 +81,6 @@ services:
     container_name: drone_global_triggers
     image: proget.hunterwittenborn.com/docker/hwittenborn/drone-global-triggers
     restart: unless-stopped
-    networks:
-      - drone
     environment:
       DRONE_VALIDATE_PLUGIN_SECRET: {{ drone_validate_plugin_secret }}
       ALLOWLIST: 'push,cron,custom'
@@ -96,15 +89,13 @@ services:
     container_name: drone_global_env
     image: proget.hunterwittenborn.com/docker/hwittenborn/drone-global-env
     restart: unless-stopped
-    networks:
-      - drone
-    ports:
-      - 127.0.0.1:5041:8080
     volumes:
       - ./data/drone_global_env/config.yaml:/data/config.yaml
     environment:
       DRONE_ENV_PLUGIN_TOKEN: {{ drone_env_plugin_token }}
+    labels:
+      - "traefik.http.routers.drone_global_env.rule=Host(`drone-global-env.{{ hw_url }}`)"
+      - "traefik.http.services.drone_global_env.loadbalancer.server.port=8080"
+      - "traefik.enable=true"
 
-networks:
-  drone:
-    name: drone
+# vim: set syntax=yaml sw=2 expandtab:

@@ -5,16 +5,15 @@ services:
     restart: unless-stopped
     depends_on:
       - shlink_backend
-    ports:
-      - "127.0.0.1:5061:80"
+    labels:
+      - "traefik.http.routers.shlink_webapp.rule=Host(`shlink-admin.{{ hw_url }}`)"
+      - "traefik.enable=true"
 
   shlink_backend:
     image: shlinkio/shlink:stable
     restart: unless-stopped
     depends_on:
       - shlink_postgres
-    ports:
-      - "127.0.0.1:5060:8080"
     environment:
       - "DEFAULT_DOMAIN=shlink.hunterwittenborn.com"
       - "USE_HTTPS=false"
@@ -25,6 +24,9 @@ services:
       - "DB_PASSWORD={{ shlink_postgres_password }}"
       - "DB_HOST=shlink_postgres"
       - "AUTO_RESOLVE_TITLES=true"
+    labels:
+      - "traefik.http.routers.shlink_backend.rule=Host(`shlink.{{ hw_url }}`)"
+      - "traefik.enable=true"
 
   shlink_postgres:
     image: postgres:13
@@ -35,3 +37,5 @@ services:
       - "POSTGRES_USER=user"
       - "POSTGRES_PASSWORD={{ shlink_postgres_password }}"
       - "POSTGRES_DB=database"
+
+# vim: set syntax=yaml sw=2 expandtab:

@@ -3,19 +3,20 @@ current_services:
   - bitwarden.hunterwittenborn.com
   - cdn.hunterwittenborn.com
   - docs.hunterwittenborn.com
+  - docs.makedeb.org
   - drone.hunterwittenborn.com
   - element.hunterwittenborn.com
   - html
   - hunterwittenborn.com
   - mailcow.hunterwittenborn.com
+  - makedeb.org
   - matrix.hunterwittenborn.com
   - mpr.makedeb.org
   - nextcloud.hunterwittenborn.com
   - proget.hunterwittenborn.com
   - shlink.hunterwittenborn.com
+  - traefik.hunterwittenborn.com
   - www.hunterwittenborn.com
-  - makedeb.org
-  - docs.makedeb.org
 
 website_dir: "/var/www"
 website_mnt_dir: "/mnt/homelab-main/websites"

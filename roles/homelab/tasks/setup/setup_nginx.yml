@@ -7,6 +7,18 @@
     argv: ["certbot", "certonly", "--dns-cloudflare", "--dns-cloudflare-credentials", "/root/cloudflare-credentials.ini", "-n",
            "-d", "*.{{ hw_url }}", "-d", "{{ hw_url }}", "-d", "*.{{ makedeb_url }}", "-d", "{{ makedeb_url }}", "--cert-name", "homelab"]
 
+- name: List NGINX config files on the server
+  ansible.builtin.find:
+    paths: "/etc/nginx/sites-enabled/"
+    patterns: "*"
+  register: nginx_files
+
+- name: Remove all NGINX config files
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ nginx_files.files }}"
+
 - name: Copy main NGINX configuration file
   ansible.builtin.template:
     src: nginx/nginx.conf
@@ -18,31 +30,13 @@
 - name: Copy NGINX service files to server
   changed_when: False
   ansible.builtin.template:
-    src: "nginx/sites-enabled/{{ item }}"
-    dest: "/etc/nginx/sites-enabled/{{ item }}"
+    src: "{{ item }}"
+    dest: "/etc/nginx/sites-enabled/{{ item | basename }}"
     owner: root
     group: root
     mode: '644'
-  loop:
-    - all
-    - api.hunterwittenborn.com
-    - bitwarden.hunterwittenborn.com
-    - cdn.hunterwittenborn.com
-    - docs.hunterwittenborn.com
-    - docs.makedeb.org
-    - drone.hunterwittenborn.com
-    - element.hunterwittenborn.com
-    - hunterwittenborn.com
-    - makedeb.org
-    - mailcow.hunterwittenborn.com
-    - matrix-admin.hunterwittenborn.com
-    - matrix.hunterwittenborn.com
-    - mpr.makedeb.org
-    - nextcloud.hunterwittenborn.com
-    - proget.hunterwittenborn.com
-    - shlink-admin.hunterwittenborn.com
-    - shlink.hunterwittenborn.com
-    - www.hunterwittenborn.com
+  with_fileglob:
+    - "../templates/nginx/sites-enabled/*"
 
 - name: List NGINX service files on server
   register: nginx_configs

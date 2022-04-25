@@ -4,22 +4,19 @@ services:
     container_name: proget_app
     image: proget.inedo.com/productimages/inedo/proget:6
     restart: unless-stopped
-    networks:
-      - proget
-    ports:
-      - 127.0.0.1:5010:80
     volumes:
       - ./data/app:/var/proget/packages
     environment:
       SQL_CONNECTION_STRING: 'Data Source=proget_sql; Initial Catalog=database; User ID=sa; Password={{ proget_sql_password }}'
       TZ: "America/Chicago"
+    labels:
+      - "traefik.http.routers.proget_app.rule=Host(`proget.{{ hw_url }}`)"
+      - "traefik.enable=true"
 
   proget_sql:
     container_name: proget_sql
     image: mcr.microsoft.com/mssql/server:2019-latest
     restart: unless-stopped
-    networks:
-      - proget
     volumes:
       - ./data/sql:/var/opt/mssql/data
     environment:
@@ -28,6 +25,4 @@ services:
       MSSQL_PID: "Express"
     user: "root:root"
 
-networks:
-  proget:
-    name: proget
+# vim: set syntax=yaml sw=2 expandtab:

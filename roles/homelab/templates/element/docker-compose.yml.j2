@@ -3,13 +3,11 @@ services:
   element_app:
     container_name: element_app
     image: vectorim/element-web
-    networks:
-      - element
-    ports:
-      - 127.0.0.1:5050:80
     volumes:
       - ./data/app/config.json:/app/config.json
+    labels:
+      - "traefik.http.routers.element_app.rule=Host(`element.{{ hw_url }}`)"
+      - "traefik.enable=true"
 
-networks:
-  element:
-    name: element
+
+# vim: set syntax=yaml sw=2 expandtab:

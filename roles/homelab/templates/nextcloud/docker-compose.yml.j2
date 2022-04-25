@@ -4,10 +4,6 @@ services:
     container_name: nextcloud_app
     image: nextcloud:stable
     restart: unless-stopped
-    networks:
-      - nextcloud
-    ports:
-      - 127.0.0.1:5030:80
     volumes:
       - ./data/app:/var/www/html
     environment:
@@ -22,13 +18,14 @@ services:
 
       # Other
       NEXTCLOUD_TRUSTED_DOMAINS: 'nextcloud.hunterwittenborn.com'
+    labels:
+      - "traefik.http.routers.nextcloud_app.rule=Host(`nextcloud.{{ hw_url }}`)"
+      - "traefik.enable=true"
 
   nextcloud_postgres:
     container_name: nextcloud_postgres
     image: postgres:13
     restart: unless-stopped
-    networks:
-      - nextcloud
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
     environment:
@@ -36,6 +33,4 @@ services:
       POSTGRES_USER: 'user'
       POSTGRES_PASSWORD: '{{ nextcloud_postgres_password }}'
 
-networks:
-  nextcloud:
-    name: nextcloud
+# vim: set syntax=yaml sw=2 expandtab:

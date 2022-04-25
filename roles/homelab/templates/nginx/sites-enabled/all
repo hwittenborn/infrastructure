@@ -3,3 +3,18 @@ server {
 	listen 80;
 	return 301 https://$host$request_uri;
 }
+
+# Pass any undefined servers to the Traefik instance.
+server {
+	listen 443 ssl;
+	server_name _;
+	location / {
+    		proxy_pass http://localhost:6000;
+    		proxy_set_header Host $host;
+    		proxy_set_header X-Real-IP $remote_addr;
+    		proxy_set_header X-Forwarded-Proto "https";
+	}
+
+  ssl_certificate /etc/letsencrypt/live/homelab/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/homelab/privkey.pem;
+}

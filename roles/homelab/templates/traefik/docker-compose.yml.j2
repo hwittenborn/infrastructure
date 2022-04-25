@@ -1,0 +1,12 @@
+version: '3'
+services:
+  traefik:
+    image: traefik:v2.6
+    network_mode: "host"
+    ports:
+      - "6000:80"
+    volumes:
+      - ./traefik.yml:/etc/traefik/traefik.yml
+      - /var/run/docker.sock:/var/run/docker.sock
+
+# vim: set syntax=yaml sw=2 expandtab:

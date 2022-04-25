@@ -1,25 +1,20 @@
 version: '3.5'
 services:
-  bitwarden_app:
-    container_name: bitwarden_app
+  bitwarden:
     image: vaultwarden/server:latest
     restart: unless-stopped
-    networks:
-      - bitwarden
-    ports:
-      - 127.0.0.1:5000:80
     volumes:
       - ./data/app:/data
     environment:
       SIGNUPS_ALLOWED: 'false'
-      DATABASE_URL: 'postgresql://user:{{ bitwarden_postgres_password }}@bitwarden_postgres:5432/database'
+      DATABASE_URL: 'postgresql://user:{{ bitwarden_postgres_password }}@postgres:5432/database'
+    labels:
+      - "traefik.http.routers.bitwarden.rule=Host(`bitwarden.{{ hw_url }}`)"
+      - "traefik.enable=true"
 
-  bitwarden_postgres:
-    container_name: bitwarden_postgres
+  postgres:
     image: postgres:13
     restart: unless-stopped
-    networks:
-      - bitwarden
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
     environment:
@@ -27,6 +22,4 @@ services:
       POSTGRES_USER: 'user'
       POSTGRES_DB: 'database'
 
-networks:
-  bitwarden:
-    name: bitwarden
+# vim: set syntax=yaml sw=2 expandtab:
