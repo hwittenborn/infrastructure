@@ -40,7 +40,7 @@ services:
       - ./data/matrix-hookshot:/data
     labels:
       - "traefik.http.routers.matrix-hookshot.rule=Host(`matrix-hookshot.{{ hw_url }}`)"
+      - "traefik.http.services.matrix-hookshot.loadbalancer.server.port=9000"
       - "traefik.enable=true"
-
 
 # vim: set syntax=yaml ts=2 sw=2 expandtab:
