@@ -14,7 +14,8 @@
     mode: "{{ item.mode }}"
   loop: [
     {"src": "drone/docker-compose.yml.j2", "dest": "/var/www/drone.hunterwittenborn.com/docker-compose.yml", "owner": "root", "mode": "600"},
-    {"src": "drone/service.sh.j2", "dest": "/var/www/drone.hunterwittenborn.com/service.sh", "owner": "root", "mode": "755"}
+    {"src": "drone/service.sh.j2", "dest": "/var/www/drone.hunterwittenborn.com/service.sh", "owner": "root", "mode": "755"},
+    {"src": "drone/drone_autoscale_agent.env.j2", "dest": "/var/www/drone.hunterwittenborn.com/drone_autoscale_agent.env", "owner": "root", "mode": "644"}
   ]
 
 - name: Update Drone CI

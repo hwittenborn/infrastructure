@@ -13,6 +13,7 @@ server {
     		proxy_set_header Host $host;
     		proxy_set_header X-Real-IP $remote_addr;
     		proxy_set_header X-Forwarded-Proto "https";
+		client_max_body_size 0;
 	}
 
   ssl_certificate /etc/letsencrypt/live/homelab/fullchain.pem;

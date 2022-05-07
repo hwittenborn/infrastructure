@@ -29,32 +29,6 @@
     {"name": "nginx", "state": "started"}
   ]
 
-- name: Find list of services currently on the server
-  register: services
-  ansible.builtin.find:
-    paths: /var/www/
-    file_type: directory
-    recurse: no
-
-- name: Stop any services we no longer need
-  loop: "{{ services.files }}"
-  when: "'{{ item.path | basename }}' not in current_services"
-  ansible.builtin.command:
-    argv: ["./service.sh", "stop"]
-    removes: "./service.sh"
-    chdir: "{{ item.path }}"
-  loop_control:
-    label: "{{ item.path }}"
-
-- name: Remove data for any services we no longer need
-  loop: "{{ services.files }}"
-  when: "'{{ item.path | basename }}' not in current_services"
-  ansible.builtin.file:
-    path: "{{ item.path }}"
-    state: absent
-  loop_control:
-    label: "{{ item.path }}"
-
 # Set up services.
 - name: Set up Proget
   import_tasks: services/proget.hunterwittenborn.com
