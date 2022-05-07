@@ -3,7 +3,7 @@ services:
   # Drone server.
   drone_app:
     container_name: drone_app
-    image: drone/drone:2
+    image: proget.{{ hw_url }}/docker/hwittenborn/drone:2.11.1
     restart: unless-stopped
     volumes:
       - ./data/app:/data
