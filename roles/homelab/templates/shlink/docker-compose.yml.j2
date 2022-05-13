@@ -25,7 +25,7 @@ services:
       - "DB_HOST=shlink_postgres"
       - "AUTO_RESOLVE_TITLES=true"
     labels:
-      - "traefik.http.routers.shlink_backend.rule=Host(`shlink.{{ hw_url }}`)"
+      - "traefik.http.routers.shlink_backend.rule=Host(`shlink.{{ hw_url }}`) || Host(`shlink.{{ makedeb_url }}`)"
       - "traefik.enable=true"
 
   shlink_postgres:
