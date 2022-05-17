@@ -1,0 +1,30 @@
+version: '3.5'
+services:
+  guacamole-guacamole:
+    image: guacamole/guacamole
+    restart: always
+    environment:
+      - "GUACD_HOSTNAME=guacamole-guacd"
+      - "POSTGRES_HOSTNAME=guacamole-postgres"
+      - "POSTGRES_DATABASE=guacamole"
+      - "POSTGRES_USER=guacamole"
+      - "POSTGRES_PASSWORD={{ guacamole_postgres_password }}"
+    labels:
+      - "traefik.http.routers.guacamole-guacamole.rule=Host(`guacamole.{{ hw_url }}`)"
+      - "traefik.enable=true"
+
+  guacamole-guacd:
+    image: guacamole/guacd
+    restart: always
+
+  guacamole-postgres:
+    image: postgres
+    restart: always
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    environment:
+      - "POSTGRES_PASSWORD={{ guacamole_postgres_password }}"
+      - "POSTGRES_USER=guacamole"
+      - "POSTGRES_DB=guacamole"
+
+# vim: set syntax=yaml sw=2 expandtab:

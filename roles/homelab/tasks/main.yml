@@ -58,6 +58,10 @@
   import_tasks: services/shlink.hunterwittenborn.com
   tags: ["shlink"]
 
+- name: Set up Guacamole
+  import_tasks: services/guacamole.hunterwittenborn.com
+  tags: ["guacamole"]
+
 - name: Set up Traefik
   import_tasks: services/traefik.hunterwittenborn.com
   tags: ["traefik"]
