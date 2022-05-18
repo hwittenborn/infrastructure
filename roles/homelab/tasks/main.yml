@@ -58,6 +58,10 @@
   import_tasks: services/shlink.hunterwittenborn.com
   tags: ["shlink"]
 
+- name: Set up Sshwifty
+  import_tasks: services/sshwifty.hunterwittenborn.com
+  tags: ["sshwifty"]
+
 - name: Set up Traefik
   import_tasks: services/traefik.hunterwittenborn.com
   tags: ["traefik"]

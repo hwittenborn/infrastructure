@@ -1,0 +1,15 @@
+version: "3.5"
+services:
+  sshwifty_sshwifty:
+    image: niruix/sshwifty
+    restart: unless-stopped
+    volumes:
+      - "./sshwifty.conf.json:/sshwifty.conf.json:ro"
+      - "./sshwifty.ed25519:/sshwifty.ed25519:ro"
+    environment:
+      - "SSHWIFTY_CONFIG=/sshwifty.conf.json"
+    labels:
+      - "traefik.http.routers.sshwifty_sshwifty.rule=Host(`sshwifty.{{ hw_url }}`)"
+      - "traefik.enable=true"
+
+# vim: set syntax=yaml sw=2 expandtab:
