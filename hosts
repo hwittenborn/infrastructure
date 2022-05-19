@@ -4,8 +4,12 @@ hunterwittenborn.com
 [mpr]
 mpr
 
+[drone-ci]
+prebuilt-mpr.hunterwittenborn.com
+
 [drone]
 hunterwittenborn.com
+prebuilt-mpr.hunterwittenborn.com
 mpr
 
 # vim: set syntax=toml noet:

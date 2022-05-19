@@ -1,0 +1,12 @@
+#!/usr/bin/bash
+set -e
+
+cd "$(dirname "${0}")"
+
+case "${1}" in
+  start) docker-compose up -d ;;
+  stop) docker-compose down ;;
+  update) docker-compose pull ;;
+esac
+
+# vim: expandtab ts=2 sw=2

@@ -1,0 +1,22 @@
+version: '3.5'
+services:
+  # Drone Docker runner.
+  drone_docker:
+    container_name: drone-docker
+    image: drone/drone-runner-docker:1
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - 'DRONE_RPC_HOST=drone.{{ hw_url }}'
+      - 'DRONE_RPC_PROTO=https'
+      - 'DRONE_RPC_SECRET={{ drone_rpc_secret }}'
+      - 'DRONE_LIMIT_REPOS=hwittenborn/*,makedeb/*'
+      - 'DRONE_LIMIT_EVENTS=cron,push,custom'
+      - 'DRONE_RUNNER_LABELS=server:prebuilt-mpr'
+
+      # Extension: Global environment config
+      - 'DRONE_ENV_PLUGIN_ENDPOINT=https://drone-global-env.{{ hw_url }}'
+      - 'DRONE_ENV_PLUGIN_TOKEN={{ drone_env_plugin_token }}'
+
+# vim: set syntax=yaml sw=2 expandtab:

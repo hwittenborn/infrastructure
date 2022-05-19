@@ -1,0 +1,52 @@
+- name: Ensure needed packages are installed
+  tags: ["apt"]
+  ansible.builtin.apt:
+    update_cache: yes
+    state: latest
+    pkg:
+      - cron
+      - neovim
+      - docker.io
+      - docker-compose
+
+- name: Create directory for Drone Docker Runner config if it doesn't exist
+  tags: ["drone"]
+  ansible.builtin.file:
+    path: /var/www/drone-ci
+    state: directory
+    mode: '755'
+
+- name: Stop Drone Docker Runner if it's currently running
+  tags: ["drone"]
+  changed_when: False
+  ansible.builtin.command:
+    argv: ["./service.sh", "stop"]
+    chdir: "/var/www/drone-ci"
+    removes: "./service.sh"
+
+- name: Copy Drone Docker Runner service files
+  tags: ["drone"]
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.owner }}"
+    mode: "{{ item.mode }}"
+  loop: [
+    {"src": "drone/docker-compose.yml.j2", "dest": "/var/www/drone-ci/docker-compose.yml", "owner": "root", "mode": "600"},
+    {"src": "drone/service.sh.j2", "dest": "/var/www/drone-ci/service.sh", "owner": "root", "mode": "755"}
+  ]
+
+- name: Update Drone CI
+  tags: ["drone"]
+  changed_when: False
+  ansible.builtin.command:
+    argv: ["./service.sh", "update"]
+    chdir: "/var/www/drone-ci"
+
+- name: Bring Drone CI up
+  tags: ["drone"]
+  changed_when: False
+  ansible.builtin.command:
+    argv: ["./service.sh", "start"]
+    chdir: "/var/www/drone-ci"
