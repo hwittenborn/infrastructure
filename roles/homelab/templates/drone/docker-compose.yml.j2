@@ -56,40 +56,6 @@ services:
       DRONE_ENV_PLUGIN_ENDPOINT: 'http://drone_global_env:8080'
       DRONE_ENV_PLUGIN_TOKEN: {{ drone_env_plugin_token }}
 
-  # Drone Autoscaler.
-  drone_autoscaler:
-    container_name: drone_autoscaler
-    image: drone/autoscaler
-    restart: unless-stopped
-    volumes:
-      - ./data/drone_autoscaler:/data
-      - ./drone_autoscale_agent.env:/drone_autoscale_agent.env
-    environment:
-      # We have three runners that are always active:
-      # 1. The Docker runner on the homelab.
-      # 2. The exec runner on the homelab.
-      # 3. The exec runner on the MPR.
-      # We want to have up to two instances available for the autoscaler, so we need
-      # to account for those three runners and increase the load here.
-      - "DRONE_POOL_MIN=3"
-      - "DRONE_POOL_MAX=5"
-      - "DRONE_INTERVAL=1m"
-      - "DRONE_SERVER_PROTO=https"
-      - "DRONE_SERVER_HOST=drone.{{ hw_url }}"
-      - "DRONE_SERVER_TOKEN={{ drone_machine_user_token }}"
-      - "DRONE_AGENT_TOKEN={{ drone_rpc_secret }}"
-      - "DRONE_AGENT_CONCURRENCY=6"
-      - "DRONE_AGENT_ENV_FILE=/drone_autoscale_agent.env"
-      - "DRONE_AGENT_LABELS=server:prebuilt-mpr"
-      - "DRONE_HETZNERCLOUD_DATACETNER=ash-dc1"
-      - "DRONE_HETZNERCLOUD_SSHKEY=6071249"
-      - "DRONE_HETZNERCLOUD_TOKEN={{ drone_hetzner_api_token }}"
-      - "DRONE_HETZNERCLOUD_TYPE=cx31"
-    labels:
-      - "traefik.http.routers.drone_autoscaler.rule=Host(`drone-autoscale.{{ hw_url }}`)"
-      - "traefik.http.services.drone_autoscaler.loadbalancer.server.port=8080"
-      - "traefik.enable=true"
-
   drone_global_triggers:
     container_name: drone_global_triggers
     image: proget.hunterwittenborn.com/docker/hwittenborn/drone-global-triggers
