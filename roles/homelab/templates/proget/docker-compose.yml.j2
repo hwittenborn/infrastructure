@@ -10,7 +10,7 @@ services:
       SQL_CONNECTION_STRING: 'Data Source=proget_sql; Initial Catalog=database; User ID=sa; Password={{ proget_sql_password }}'
       TZ: "America/Chicago"
     labels:
-      - "traefik.http.routers.proget_app.rule=Host(`proget.{{ hw_url }}`)"
+      - "traefik.http.routers.proget_app.rule=Host(`proget.{{ hw_url }}`, `proget.{{ makedeb_url }}`)"
       - "traefik.enable=true"
 
   proget_sql:
