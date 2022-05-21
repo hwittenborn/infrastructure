@@ -51,6 +51,7 @@ services:
       DRONE_RPC_SECRET: {{ drone_rpc_secret }}
       DRONE_LIMIT_REPOS: 'hwittenborn/*,makedeb/*'
       DRONE_LIMIT_EVENTS: 'cron,push,custom'
+      DRONE_RUNNER_CAPACITY: '5'
 
       # Extension: Global environment config
       DRONE_ENV_PLUGIN_ENDPOINT: 'http://drone_global_env:8080'
