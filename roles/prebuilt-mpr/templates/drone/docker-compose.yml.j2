@@ -15,6 +15,7 @@ services:
       - 'DRONE_LIMIT_EVENTS=cron,push,custom'
       - 'DRONE_RUNNER_LABELS=server:prebuilt-mpr'
       - 'DRONE_RUNNER_CAPACITY=10'
+      - 'DRONE_DEBUG=true'
 
       # Extension: Global environment config
       - 'DRONE_ENV_PLUGIN_ENDPOINT=https://drone-global-env.{{ hw_url }}'
