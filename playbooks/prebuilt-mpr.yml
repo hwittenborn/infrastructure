@@ -1,6 +1,6 @@
 ---
-- name: Setup MPR Server
-  hosts: drone-ci
+- name: Setup Prebuilt-MPR CI Server
+  hosts: prebuilt-mpr
   remote_user: root
   roles:
     - setup_apt

@@ -1,12 +1,14 @@
+# Server definitions.
 [homelab]
 hunterwittenborn.com
 
 [mpr]
 mpr
 
-[drone-ci]
+[prebuilt-mpr]
 prebuilt-mpr.hunterwittenborn.com
 
+# Servers that need access to Drone CI secrets.
 [drone]
 hunterwittenborn.com
 prebuilt-mpr.hunterwittenborn.com

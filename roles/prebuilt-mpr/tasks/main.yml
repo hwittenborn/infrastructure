@@ -8,6 +8,8 @@
       - neovim
       - docker.io
       - docker-compose
+      - curl
+      - jq
 
 - name: Create directory for Drone Docker Runner config if it doesn't exist
   tags: ["drone"]

@@ -1,12 +1,26 @@
 #!/usr/bin/bash
-set -e
+set -euo pipefail
 
 cd "$(dirname "${0}")"
 
 case "${1}" in
-  start) docker-compose up -d ;;
-  stop) docker-compose down ;;
-  update) docker-compose pull ;;
+    start)
+        docker-compose up -d
+        ;;
+    stop)
+        # We don't want to run backups when CI builds are running, so abort if so.
+        # Set the 'builds' env manually so we can also abort if the 'curl' request fails.
+        builds="$(curl -sf 'https://drone.{{ hw_url }}/api/repos/makedeb/prebuilt-mpr/builds')"
+        if echo "${builds}" | jq -r '.[].status' | grep running; then
+            echo "CI BUILDS ARE RUNNING! We'll back up later."
+            exit 1
+        fi
+
+        docker-compose down
+        ;;
+    update)
+        docker-compose pull
+        ;;
 esac
 
-# vim: expandtab ts=2 sw=2
+# vim: set sw=4 expandtab:
