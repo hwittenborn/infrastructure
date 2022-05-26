@@ -1,0 +1,37 @@
+#!/usr/bin/bash
+cd "$(dirname "${0}")"
+mapfile -t folders < <(find ./ -mindepth 1 -maxdepth 1 -type d)
+
+case "${1}" in
+    start)
+        for folder in "${folders[@]}"; do
+            cd "${folder}"
+            if [[ -f './service.sh' ]]; then
+                ./service.sh start
+            fi
+            cd ../
+        done
+        ;;
+
+    stop)
+        for folder in "${folders[@]}"; do
+            cd "${folder}"
+            if [[ -f './service.sh' ]]; then
+                ./service.sh stop
+            fi
+            cd ../
+        done
+        ;;
+
+    update)
+        for folder in "${folders[@]}"; do
+            cd "${folder}"
+            if [[ -f './service.sh' ]]; then
+                ./service.sh update
+            fi
+            cd ../
+        done
+        ;;
+esac
+
+# vim: expandtab sw=4 expandtab:

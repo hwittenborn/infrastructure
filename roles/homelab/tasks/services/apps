@@ -1,0 +1,17 @@
+- name: Create directory for extra apps if it doesn't exist
+  ansible.builtin.file:
+    path: "/var/www/apps"
+    state: "directory"
+
+- name: Copy extra apps service files
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.owner }}"
+    mode: "{{ item.mode }}"
+  loop: [
+    {"src": "apps/service.sh.j2", "dest": "/var/www/apps/service.sh", "owner": "root", "mode": "755"}
+  ]
+
+# vim: set ts=2 sw=2 expandtab syntax=yaml:

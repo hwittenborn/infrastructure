@@ -62,6 +62,10 @@
   import_tasks: services/sshwifty.hunterwittenborn.com
   tags: ["sshwifty"]
 
+- name: Set up Apps folder
+  import_tasks: services/apps
+  tags: ["apps"]
+
 - name: Set up Traefik
   import_tasks: services/traefik.hunterwittenborn.com
   tags: ["traefik"]
