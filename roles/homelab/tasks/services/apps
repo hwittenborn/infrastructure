@@ -17,6 +17,13 @@
     {"src": "apps/service.sh.j2", "dest": "/var/www/apps/service.sh", "owner": "root", "mode": "755"}
   ]
 
+- name: Stop Minecraft if it's currently running
+  changed_when: False
+  ansible.builtin.command:
+    argv: ["./service.sh", "stop"]
+    chdir: "/var/www/apps/minecraft-server"
+    removes: "./service.sh"
+
 - name: Copy Minecraft service files
   ansible.builtin.template:
     src: "apps/minecraft-server/{{ item.path }}"
