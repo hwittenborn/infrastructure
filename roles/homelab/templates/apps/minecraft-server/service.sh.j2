@@ -1,0 +1,35 @@
+#!/usr/bin/bash
+set -e
+
+cd "$(dirname "${0}")"
+
+send_msg() {
+    curl -LX POST 'http://localhost:17394/execute' -H 'Content-Type: application/json' --data-raw "{\"command\": \"${1}\"}" -m 2
+}
+
+case "${1}" in
+    start)
+        docker-compose up -d
+        ;;
+
+    stop)
+        send_msg "say Shutting down in *30 SECONDS* to perform backups. Please wrap up anything you're current doing."
+        sleep 20
+
+        for num in {10..1}; do
+            send_msg "say Shutting down in ${num}..."
+            sleep 1
+        done
+
+        send_msg "say Shutting down. We'll be back in a few minutes."
+        sleep 3
+
+        docker-compose down
+        ;;
+
+    update)
+        docker-compose pull
+        ;;
+esac
+
+# vim: set sw=4 expandtab:
