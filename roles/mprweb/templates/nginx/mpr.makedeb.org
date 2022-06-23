@@ -1,18 +1,30 @@
+# Redirect some domains for legacy purposes.
 server {
-  server_name mpr.makedeb.org;
-  listen 443 ssl;
-  location / {
-    proxy_pass http://localhost:8080;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-  }
+    server_name dur.hunterwittenborn.com mpr.hunterwittenborn.com dur.makedeb.org;
+    listen 443 ssl;
+    rewrite ^(.*)$ https://mpr.makedeb.org$1 redirect;
 
-  ssl_certificate /etc/letsencrypt/live/mpr.makedeb.org/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/mpr.makedeb.org/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/mpr.makedeb.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/mpr.makedeb.org/privkey.pem;
 }
 
 server {
-        server_name _;
-        listen 80;
-        return 301 https://$host$request_uri;
+    server_name mpr.makedeb.org;
+    listen 443 ssl;
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    ssl_certificate /etc/letsencrypt/live/mpr.makedeb.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/mpr.makedeb.org/privkey.pem;
 }
+
+server {
+    server_name _;
+    listen 80;
+    return 301 https://$host$request_uri;
+}
+
+# vim: set syntax=nginx sw=4 expandtab:
