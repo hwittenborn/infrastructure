@@ -1,35 +1,13 @@
 version: "3.5"
 services:
-  bedrock-server-app:
-    image: itzg/minecraft-bedrock-server
+  java-server-app:
+    image: marctv/minecraft-papermc-server
     restart: unless-stopped
     ports:
-      - "19132:19132/udp"
-    environment:
-      - "EULA=TRUE"
-      - "VERSION=LATEST"
-      - "SERVER_NAME=The official Minecraft server for the makedeb community!"
-      - "LEVEL_NAME=makedeb"
-      - "GAMEMODE=survival"
-      - "DIFFICULTY=normal"
-      - "ONLINE_MODE=true"
-      - "DEFAULT_PLAYER_PERMISSION_LEVEL=member"
-      - "CORRECT_PLAYER_MOVEMENT=true"
+      - 25565:25565
     volumes:
-      - ./data:/data
-    labels:
-      - "minecraft_bedrock_server=true"
+       - ./data:/data
     stdin_open: true
     tty: true
-
-  bedrock-server-bridge:
-    image: macchie/minecraft-bedrock-server-bridge
-    restart: unless-stopped
-    ports:
-       - "127.0.0.1:17394:17394"
-    environment:
-      - "ENABLE_API=true"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
 
 # vim: set syntax=yaml sw=2 expandtab:

@@ -4,17 +4,17 @@
     state: "directory"
     recurse: yes
   loop:
-    - minecraft-server
+    - "minecraft-server/data"
 
 - name: Copy extra apps service files
   ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-    owner: "{{ item.owner }}"
-    group: "{{ item.owner }}"
+    owner: root
+    group: root
     mode: "{{ item.mode }}"
   loop: [
-    {"src": "apps/service.sh.j2", "dest": "/var/www/apps/service.sh", "owner": "root", "mode": "755"}
+    {"src": "apps/service.sh.j2", "dest": "/var/www/apps/service.sh", "owner": "root", "mode": "755"},
   ]
 
 - name: Stop Minecraft if it's currently running
@@ -27,13 +27,14 @@
 - name: Copy Minecraft service files
   ansible.builtin.template:
     src: "apps/minecraft-server/{{ item.path }}"
-    dest: "/var/www/apps/minecraft-server/{{ item.path | regex_replace('\\.j2$', '') }}"
+    dest: "/var/www/apps/minecraft-server/{{ item.dest }}"
     owner: root
     group: root
     mode: "{{ item.mode }}"
   loop: [
-    {"path": "docker-compose.yml.j2", "mode": "644"},
-    {"path": "service.sh.j2", "mode": "755"}
+    {"path": "docker-compose.yml.j2", "dest": "docker-compose.yml", "mode": "644"},
+    {"path": "service.sh.j2", "dest": "service.sh", "mode": "755"},
+    {"path": "server.properties.j2", "dest": "data/server.properties", "mode": "644"}
   ]
 
 - name: Update Minecraft

@@ -3,27 +3,30 @@ set -e
 
 cd "$(dirname "${0}")"
 
-send_msg() {
-    curl -LX POST 'http://localhost:17394/execute' -H 'Content-Type: application/json' --data-raw "{\"command\": \"${1}\"}" -m 2
-}
-
 case "${1}" in
     start)
+        # If the plugins directory doesn't exist, create it.
+        if ! [[ -d data/plugins ]]; then
+            mkdir -p data/plugins
+        fi
+
+        # Install needed plugins.
+        plugins=(
+            'ViaVersion.jar::https://github.com/ViaVersion/ViaVersion/releases/download/4.3.1/ViaVersion-4.3.1.jar'
+            'ViaBackwards.jar::https://github.com/ViaVersion/ViaBackwards/releases/download/4.3.0/ViaBackwards-4.3.0.jar'
+        )
+
+        for plugin in "${plugins[@]}"; do
+            output="$(echo "${plugin}" | sed 's|::.*||')"
+            url="$(echo "${plugin}" | sed 's|.*::||')"
+
+            curl "${url}" -Lo "data/plugins/${output}"
+        done
+
         docker-compose up -d
         ;;
 
     stop)
-        send_msg "say Shutting down in *30 SECONDS* to perform maintenance. Please wrap up anything you're current doing."
-        sleep 20
-
-        for num in {10..1}; do
-            send_msg "say Shutting down in ${num}..."
-            sleep 1
-        done
-
-        send_msg "say Shutting down. We'll be back in a few minutes."
-        sleep 3
-
         docker-compose down
         ;;
 
