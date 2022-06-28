@@ -7,12 +7,13 @@
       - cron
       - docker.io
       - docker-compose
+      - drone-runner-exec
       - gpg
+      - mcrcon
+      - neovim
       - nginx
       - python3-certbot-dns-cloudflare
       - restic
-      - neovim
-      - drone-runner-exec
 
 - name: Setup NGINX
   import_tasks: setup/setup_nginx.yml

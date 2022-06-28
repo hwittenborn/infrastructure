@@ -3,6 +3,10 @@ set -e
 
 cd "$(dirname "${0}")"
 
+send_cmd() {
+    mcrcon -p '{{ minecraft_rcon_password }}' "${1}"
+}
+
 case "${1}" in
     start)
         # If the plugins directory doesn't exist, create it.
@@ -28,6 +32,18 @@ case "${1}" in
         ;;
 
     stop)
+        # Notify the users that the server is shutting down.
+        send_cmd "say Server is shutting down in 30 seconds to run maintenance jobs. Please wrap up anything you're currently doing."
+        sleep 20
+
+        for num in {10..1}; do
+            send_cmd "say Shutting down in ${num}..."
+            sleep 1
+        done
+
+        send_cmd "say Shutting down to run maintenance jobs. We'll be back in a few minutes."
+        sleep 5 # Wait a little bit more so users have a chance to read the message.
+
         docker-compose down
         ;;
 

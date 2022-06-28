@@ -5,6 +5,7 @@ services:
     restart: unless-stopped
     ports:
       - 25565:25565
+      - 127.0.0.1:25575:25575
     volumes:
        - ./data:/data
     stdin_open: true
