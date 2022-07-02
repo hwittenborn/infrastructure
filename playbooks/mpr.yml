@@ -3,6 +3,7 @@
   hosts: mpr
   remote_user: root
   roles:
+    - {role: "setup_ssh", users: ["hwittenborn", "leo", "sshwifty"]}
     - setup_apt
     - setup_cloudflare
     - setup_scripts

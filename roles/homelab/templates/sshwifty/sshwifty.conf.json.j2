@@ -14,17 +14,45 @@
 		"TLSCertificateFile": "",
 		"TLSCertificateKeyFile": ""
 	}],
-	"Presets": [{
-  		"Title": "Desktop",
-		"Type": "SSH",
-		"Host": "home.{{ hw_url }}",
-		"Meta": {
-			"User": "hunter",
-			"Encoding": "utf-8",
-			"Private Key": "file:///sshwifty.ed25519",
-			"Authentication": "Private Key",
-			"Fingerprint": "SHA256:eUvx40iDWeTsg7c2TLSOWlyM8bY1zEi6JeDHmTrGKpk"
+	"Presets": [
+		{
+			"Title": "Homelab",
+			"Type": "SSH",
+			"Host": "{{ hw_url }}",
+			"Meta": {
+				"User": "root",
+				"Encoding": "utf-8",
+				"Private Key": "file:///sshwifty.ed25519",
+				"Authentication": "Private Key",
+				"Fingerprint": "SHA256:ib6fl14vx6A94hiLwuiCiMkdbRS9dsFsZvjmlhynxww"
+			}
+		},
+
+		{
+			"Title": "MPR",
+			"Type": "SSH",
+			"Host": "mpr.{{ makedeb_url }}:23",
+			"Meta": {
+				"User": "root",
+				"Encoding": "utf-8",
+				"Private Key": "file:///sshwifty.ed25519",
+				"Authentication": "Private Key",
+				"Fingerprint": "SHA256:ngMCjLDQiXQQbq33aTO+2G8Rt3NcrgpnI8PZtceNquY"
+			}
+		},
+
+		{
+			"Title": "Prebuilt-MPR",
+			"Type": "SSH",
+			"Host": "prebuilt-mpr.{{ hw_url }}",
+			"Meta": {
+				"User": "root",
+				"Encoding": "utf-8",
+				"Private Key": "file:///sshwifty.ed25519",
+				"Authentication": "Private Key",
+				"Fingerprint": "SHA256:/tJZEa8nvTEM8E7ss/0wnBXeQzoJSthOMY6X3Knq5H8"
+			}
 		}
-	}],
+	],
 	"OnlyAllowPresetRemotes": true
 }

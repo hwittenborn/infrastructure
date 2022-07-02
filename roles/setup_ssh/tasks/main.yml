@@ -1,0 +1,8 @@
+- name: Add SSH keys
+  tags: ["ssh"]
+  ansible.builtin.copy:
+    dest: "/root/.ssh/authorized_keys"
+    content: |
+      {% for item in users %}
+      {{ ssh_keys[item] }}
+      {% endfor %}

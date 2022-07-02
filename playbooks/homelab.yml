@@ -3,6 +3,7 @@
   hosts: homelab
   remote_user: root
   roles:
+    - {role: "setup_ssh", users: ["hwittenborn", "sshwifty"]}
     - setup_apt
     - setup_cloudflare
     - setup_scripts
