@@ -1,0 +1,58 @@
+bridge:
+  domain: "{{ hw_url }}"
+  homeserverUrl: "https://matrix.{{ hw_url }}"
+  port: 9005
+  presenceInterval: 500
+  disablePresence: false
+  disableTypingNotifications: false
+  disableDeletionForwarding: false
+  disablePortalBridging: false
+  # Enable users to bridge rooms using !discord commands. See
+  # https://t2bot.io/discord for instructions.
+  enableSelfServiceBridging: false
+  disableReadReceipts: false
+  disableJoinLeaveNotifications: false
+  disableInviteNotifications: false
+  determineCodeLanguage: true
+  adminMxid: '@hunter:hunterwittenborn.com'
+  invalidTokenMessage: 'Your Discord bot token seems to be invalid, and the bridge cannot function. Please update it in your bridge settings and restart the bridge'
+auth:
+  clientID: "{{ matrix_discord_client_id }}"
+  botToken: "{{ matrix_discord_bot_token }}"
+  usePrivilegedIntents: true
+logging:
+  console: "warn" #silly, verbose, info, http, warn, error, silent
+  lineDateFormat: "MMM-D HH:mm:ss.SSS" # This is in moment.js format
+  files:
+    - file: "debug.log"
+      disable:
+        - "PresenceHandler" # Will not capture presence logging
+    - file: "warn.log" # Will capture warnings
+      level: "warn"
+    - file: "botlogs.log" # Will capture logs from DiscordBot
+      level: "info"
+      enable:
+        - "DiscordBot"
+database:
+  filename: "/data/discord.db"
+  # connString: "postgresql://user:password@localhost/database_name"
+room:
+  defaultVisibility: "public"
+channel:
+    namePattern: "[Discord] :guild :name"
+    deleteOptions:
+       disableMessaging: false
+       unsetRoomAlias: true
+       unlistFromDirectory: true
+       setInviteOnly: true
+       ghostsLeave: true
+limits:
+    roomGhostJoinDelay: 6000
+    discordSendDelay: 1500
+ghosts:
+    nickPattern: ":nick"
+    usernamePattern: ":username"
+metrics:
+    enable: false
+    port: 9001
+    host: "127.0.0.1"

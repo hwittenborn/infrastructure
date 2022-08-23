@@ -43,4 +43,11 @@ services:
       - "traefik.http.services.matrix-hookshot.loadbalancer.server.port=9000"
       - "traefik.enable=true"
 
+  # Discord bridge.
+  matrix-discord:
+    image: proget.{{ hw_url }}/docker/hwittenborn/matrix-appservice-discord
+    restart: unless-stopped
+    volumes:
+      - ./data/matrix-discord:/data
+
 # vim: set syntax=yaml ts=2 sw=2 expandtab:

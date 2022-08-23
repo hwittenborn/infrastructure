@@ -1,0 +1,16 @@
+as_token: "{{ matrix_discord_as_token }}"
+hs_token: "{{ matrix_discord_hs_token }}"
+id: discord-bridge
+namespaces:
+  aliases:
+    - exclusive: true
+      regex: '#_discord_.*:{{ hw_url }}'
+  rooms: []
+  users:
+    - exclusive: true
+      regex: '@_discord_.*:{{ hw_url }}'
+protocols:
+  - discord
+rate_limited: false
+sender_localpart: discord
+url: 'http://matrix-discord:9005'

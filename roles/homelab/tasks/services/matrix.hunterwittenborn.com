@@ -41,6 +41,26 @@
     {"src": "matrix/matrix-hookshot/registration.yml", "dest": "{{ website_dir }}/matrix.hunterwittenborn.com/data/app/matrix-hookshot-registration.yml"}
   ]
 
+# Matrix Discord bridge.
+- name: Ensure directory for Matrix Discord bridge exists
+  ansible.builtin.file:
+    path: "{{ website_dir }}/matrix.hunterwittenborn.com/data/matrix-discord"
+    state: directory
+    mode: '755'
+
+- name: Copy Matrix Discord Bridge service files
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "644"
+  loop: [
+    {"src": "matrix/matrix-discord/config.yaml", "dest": "{{ website_dir }}/matrix.hunterwittenborn.com/data/matrix-discord/config.yaml"},
+    {"src": "matrix/matrix-discord/registration.yaml", "dest": "{{ website_dir }}/matrix.hunterwittenborn.com/data/matrix-discord/discord-registration.yaml"},
+    {"src": "matrix/matrix-discord/registration.yaml", "dest": "{{ website_dir }}/matrix.hunterwittenborn.com/data/app/matrix-discord-registration.yml"}
+  ]
+
 # Back to Matrix.
 - name: Update Matrix
   changed_when: False
