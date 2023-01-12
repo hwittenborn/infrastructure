@@ -34,6 +34,10 @@
   import_tasks: services/proget.hunterwittenborn.com
   tags: ["proget"]
 
+- name: Set up Vault
+  import_tasks: services/vault.hunterwittenborn.com
+  tags: ["vault"]
+
 - name: Set up Drone
   import_tasks: services/drone.hunterwittenborn.com
   tags: ["drone"]

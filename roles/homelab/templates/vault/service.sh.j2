@@ -1,0 +1,18 @@
+#!/usr/bin/bash
+set -e
+
+cd "$(dirname "${0}")"
+
+case "${1}" in
+    start)
+        docker-compose up -d
+        # Wait until we can succesfully connect to the server.
+        while ! docker compose exec vault vault operator unseal -address='http://127.0.0.1:8200' "$(cat unlock_key)"; do
+            true
+        done
+        ;;
+    stop) docker-compose down ;;
+    update) docker-compose pull ;;
+esac
+
+# vim: set sw=4 expandtab:

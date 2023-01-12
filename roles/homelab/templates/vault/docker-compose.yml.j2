@@ -1,0 +1,20 @@
+version: '3.5'
+services:
+  vault:
+    image: vault
+    command: ["server"]
+    restart: unless-stopped
+    volumes:
+      - ./data/vault/logs:/vault/logs
+      - ./data/vault/file:/vault/file
+      - ./config.hcl:/vault/config/config.hcl
+    ports:
+      - 8200:8200
+    labels:
+      - "traefik.http.routers.vault.rule=Host(`vault.{{ hw_url }}`)"
+      - "traefik.http.services.vault.loadbalancer.server.port=8200"
+      - "traefik.enable=true"
+    cap_add:
+      - IPC_LOCK
+
+# vim: set syntax=yaml sw=2 expandtab:
