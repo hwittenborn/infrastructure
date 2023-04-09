@@ -34,7 +34,17 @@
   register: result
   changed_when: '"Certificate not yet due for renewal" not in result.stdout'
   ansible.builtin.command:
-    argv: ["certbot", "certonly", "--dns-cloudflare", "--dns-cloudflare-credentials", "/root/cloudflare-credentials.ini", "-n", "-d", "mpr.{{ makedeb_url }}"]
+    argv: [
+      "certbot", "certonly",
+      "--dns-cloudflare", "--dns-cloudflare-credentials",
+      "/root/cloudflare-credentials.ini", "-n",
+      "-d", "mpr.{{ makedeb_url }}",
+      # We do these two 'hunterwittenborn.com' URLs for compatibility purposes, for when the MPR was hosted on those URLs.
+      "-d", "dur.{{ hw_url }}",
+      "-d", "mpr.{{ hw_url }}",
+      "--cert-name", "mprweb",
+      "--expand"
+    ]
 
 - name: Copy NGINX config
   tags: ["nginx"]

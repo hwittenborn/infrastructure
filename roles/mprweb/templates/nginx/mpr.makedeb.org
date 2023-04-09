@@ -4,8 +4,8 @@ server {
     listen 443 ssl;
     rewrite ^(.*)$ https://mpr.makedeb.org$1 redirect;
 
-    ssl_certificate /etc/letsencrypt/live/mpr.makedeb.org/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/mpr.makedeb.org/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/mprweb/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/mprweb/privkey.pem;
 }
 
 server {
@@ -17,8 +17,8 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
     }
 
-    ssl_certificate /etc/letsencrypt/live/mpr.makedeb.org/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/mpr.makedeb.org/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/mprweb/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/mprweb/privkey.pem;
 }
 
 server {
