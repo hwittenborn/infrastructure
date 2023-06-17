@@ -1,6 +1,6 @@
 ---
 - name: Setup Prebuilt-MPR CI Server
-  hosts: prebuilt-mpr
+  hosts: vultr-prebuilt-mpr
   remote_user: root
   roles:
     - {role: "setup_ssh", users: ["hwittenborn", "sshwifty"]}

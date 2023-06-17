@@ -1,6 +1,6 @@
 ---
 - name: Setup MPR Server
-  hosts: mpr
+  hosts: vultr-mpr.makedeb.org
   remote_user: root
   roles:
     - {role: "setup_ssh", users: ["hwittenborn", "leo", "sshwifty"]}

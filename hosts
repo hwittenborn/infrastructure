@@ -1,17 +1,17 @@
 # Server definitions.
 [homelab]
-hunterwittenborn.com
+gcp-hunterwittenborn.com
 
-[mpr]
-mpr
+[vultr-mpr]
+vultr-mpr.makedeb.org
 
-[prebuilt-mpr]
-prebuilt-mpr.hunterwittenborn.com
+[vultr-prebuilt-mpr]
+vultr-prebuilt-mpr.hunterwittenborn.com
 
 # Servers that need access to Drone CI secrets.
 [drone]
-hunterwittenborn.com
-prebuilt-mpr.hunterwittenborn.com
-mpr
+gcp-hunterwittenborn.com
+vultr-prebuilt-mpr.hunterwittenborn.com
+vultr-mpr.makedeb.org
 
 # vim: set syntax=toml noet:

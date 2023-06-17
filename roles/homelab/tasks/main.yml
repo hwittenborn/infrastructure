@@ -7,6 +7,7 @@
       - cron
       - docker.io
       - docker-compose
+      - drone-runner-exec
       - gpg
       - mcrcon
       - neovim
